@@ -1239,5 +1239,275 @@ namespace MediaTekDocuments.view
             }
         }
         #endregion
+
+        /// <summary>
+        /// Récupère la liste des livres depuis l'API et affiche la liste complète dans le datagrid
+        /// </summary>
+        private void ChargerListeLivres()
+        {
+            lesLivres = controller.GetAllLivres();
+            RemplirLivresListeComplete();
+        }
+
+        /// <summary>
+        /// Récupère la liste des Dvd depuis l'API et affiche la liste complète dans le datagrid
+        /// </summary>
+        private void ChargerListeDvd()
+        {
+            lesDvd = controller.GetAllDvd();
+            RemplirDvdListeComplete();
+        }
+
+        /// <summary>
+        /// Récupère la liste des revues depuis l'API et affiche la liste complète dans le datagrid
+        /// </summary>
+        private void ChargerListeRevues()
+        {
+            lesRevues = controller.GetAllRevues();
+            RemplirRevuesListeComplete();
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet d'ouvrir le formulaire d'ajout d'un livre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddLivre_Click(object sender, EventArgs e)
+        {
+            // Crée l’instance du formulaire d’ajout
+            FrmGestionLivre frmGestion = new FrmGestionLivre();
+
+            if (frmGestion.ShowDialog() == DialogResult.OK)
+            {
+                //Recharger la liste depuis l’API
+                lesLivres = controller.GetAllLivres();
+
+                //Rafraîchir l’affichage
+                ChargerListeLivres();
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'un livre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnModifLivre_Click(object sender, EventArgs e)
+        {
+            if(dgvLivresListe.CurrentRow == null)
+            {
+                MessageBox.Show("Veuillez sélectionner un livre à modifier.");
+                return;
+            }
+            // Récupération de l'objet sélectionné
+            Livre selectLivre = (Livre)dgvLivresListe.CurrentRow.DataBoundItem;
+            // Ouverture du formulaire en mode modification
+            FrmGestionLivre frm = new FrmGestionLivre(selectLivre);
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                lesLivres = controller.GetAllLivres();
+                ChargerListeLivres();
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet de supprimer un livre après confirmation de l'utilisateur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDeleteLivre_Click(object sender, EventArgs e)
+        {
+            if (dgvLivresListe.CurrentRow == null)
+            {
+                MessageBox.Show("Veuillez sélectionner un livre à supprimer.");
+                return;
+            }
+            string id = dgvLivresListe.CurrentRow.Cells["id"].Value.ToString();
+            DialogResult confirm = MessageBox.Show(
+                "Voulez-vous vraiment supprimer ce livre ?",
+                "Confirmation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (confirm == DialogResult.Yes)
+            {
+                bool suppressionOk = controller.SupprimerDocument("livre", id);
+
+                if (suppressionOk)
+                {
+                    MessageBox.Show("Livre supprimé avec succès.");
+                    ChargerListeLivres(); // méthode qui recharge le DataGridView
+                }
+                else
+                {
+                    MessageBox.Show("Erreur lors de la suppression.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet d'ouvrir le formulaire d'ajout d'un dvd
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddDVD_Click(object sender, EventArgs e)
+        {
+            // Crée l’instance du formulaire d’ajout
+            FrmGestionDvd frmDvd = new FrmGestionDvd();
+
+            if (frmDvd.ShowDialog() == DialogResult.OK)
+            {
+                //Recharger la liste depuis l’API
+                lesDvd = controller.GetAllDvd();
+
+                //Rafraîchir l’affichage
+                ChargerListeDvd();
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'un dvd
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnModifDVD_Click(object sender, EventArgs e)
+        {
+            if (dgvDvdListe.CurrentRow == null)
+            {
+                MessageBox.Show("Veuillez sélectionner un dvd à modifier.");
+                return;
+            }
+
+            // Récupération de l'objet sélectionné
+            Dvd selectDvd = (Dvd)dgvDvdListe.CurrentRow.DataBoundItem;
+
+            // Ouverture du formulaire en mode modification
+            FrmGestionDvd frm = new FrmGestionDvd(selectDvd);
+
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                lesDvd = controller.GetAllDvd();
+                ChargerListeDvd();
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet de supprimer un dvd après confirmation de l'utilisateur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDeleteDVD_Click(object sender, EventArgs e)
+        {
+            if (dgvDvdListe.CurrentRow == null)
+            {
+                MessageBox.Show("Veuillez sélectionner un dvd à supprimer.");
+                return;
+            }
+            string id = dgvDvdListe.CurrentRow.Cells["id"].Value.ToString();
+            DialogResult confirm = MessageBox.Show(
+                "Voulez-vous vraiment supprimer ce dvd ?",
+                "Confirmation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (confirm == DialogResult.Yes)
+            {
+                bool suppressionOk = controller.SupprimerDocument("dvd", id);
+
+                if (suppressionOk)
+                {
+                    MessageBox.Show("Dvd supprimé avec succès.");
+                    ChargerListeDvd(); // méthode qui recharge le DataGridView
+                }
+                else
+                {
+                    MessageBox.Show("Erreur lors de la suppression.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet d'ouvrir le formulaire d'ajout d'une revue
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddRevue_Click(object sender, EventArgs e)
+        {
+            // Crée l’instance du formulaire d’ajout
+            FrmGestionRevue frmRevue = new FrmGestionRevue();
+
+            if (frmRevue.ShowDialog() == DialogResult.OK)
+            {
+                //Recharger la liste depuis l’API
+                lesRevues = controller.GetAllRevues();
+
+                //Rafraîchir l’affichage
+                ChargerListeRevues();
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'une revue
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnModifRevue_Click(object sender, EventArgs e)
+        {
+            if (dgvRevuesListe.CurrentRow == null)
+            {
+                MessageBox.Show("Veuillez sélectionner une revue à modifier.");
+                return;
+            }
+
+            // Récupération de l'objet sélectionné
+            Revue selectRevue = (Revue)dgvRevuesListe.CurrentRow.DataBoundItem;
+
+            // Ouverture du formulaire en mode modification
+            FrmGestionRevue frm = new FrmGestionRevue(selectRevue);
+
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                lesRevues = controller.GetAllRevues();
+                ChargerListeRevues();
+            }
+        }
+
+        /// <summary>
+        /// Evenement clic qui permet de supprimer une revue après confirmation de l'utilisateur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDeleteRevue_Click(object sender, EventArgs e)
+        {
+            if (dgvRevuesListe.CurrentRow == null)
+            {
+                MessageBox.Show("Veuillez sélectionner une revue à supprimer.");
+                return;
+            }
+            string id = dgvRevuesListe.CurrentRow.Cells["id"].Value.ToString();
+            DialogResult confirm = MessageBox.Show(
+                "Voulez-vous vraiment supprimer cette revue ?",
+                "Confirmation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (confirm == DialogResult.Yes)
+            {
+                bool suppressionOk = controller.SupprimerDocument("revue", id);
+
+                if (suppressionOk)
+                {
+                    MessageBox.Show("Revue supprimée avec succès.");
+                    ChargerListeRevues(); // méthode qui recharge le DataGridView
+                }
+                else
+                {
+                    MessageBox.Show("Erreur lors de la suppression.");
+                }
+            }
+        }
     }
 }

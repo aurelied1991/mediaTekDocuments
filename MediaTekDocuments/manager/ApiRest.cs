@@ -13,10 +13,12 @@ namespace MediaTekDocuments.manager
         /// unique instance de la classe
         /// </summary>
         private static ApiRest instance = null;
+
         /// <summary>
         /// Objet de connexion à l'api
         /// </summary>
         private readonly HttpClient httpClient;
+
         /// <summary>
         /// Canal http pour l'envoi du message et la récupération de la réponse
         /// </summary>
@@ -62,34 +64,60 @@ namespace MediaTekDocuments.manager
         /// <returns>liste d'objets (select) ou liste vide (ok) ou null si erreur</returns>
         public JObject RecupDistant(string methode, string message, String parametres)
         {
-            // transformation des paramètres pour les mettre dans le body
-            StringContent content = null;
-            if(!(parametres is null))
+            try
             {
-                content = new StringContent(parametres, System.Text.Encoding.UTF8, "application/x-www-form-urlencoded");
-            }
-            // envoi du message et attente de la réponse
-            switch (methode)
-            {
-                case "GET":
-                    httpResponse = httpClient.GetAsync(message).Result;
-                    break;
-                case "POST":
-                    httpResponse = httpClient.PostAsync(message, content).Result;
-                    break;
-                case "PUT":
-                    httpResponse = httpClient.PutAsync(message, content).Result;
-                    break;
-                case "DELETE":
-                    httpResponse = httpClient.DeleteAsync(message).Result;
-                    break;
-                // methode incorrecte
-                default:
+                // transformation des paramètres pour les mettre dans le body
+                StringContent content = null;
+
+                if (!(parametres is null))
+                {
+                    content = new StringContent(
+                        parametres,
+                        System.Text.Encoding.UTF8,
+                        "application/x-www-form-urlencoded"
+                    );
+                }
+
+                // envoi du message et attente de la réponse
+                switch (methode)
+                {
+                    case "GET":
+                        httpResponse = httpClient.GetAsync(message).Result;
+                        break;
+
+                    case "POST":
+                        httpResponse = httpClient.PostAsync(message, content).Result;
+                        break;
+
+                    case "PUT":
+                        httpResponse = httpClient.PutAsync(message, content).Result;
+                        break;
+
+                    case "DELETE":
+                        httpResponse = httpClient.DeleteAsync(message).Result;
+                        break;
+
+                    default:
+                        return new JObject();
+                }
+
+                // ⭐ Lecture réponse API
+                var responseText = httpResponse.Content.ReadAsStringAsync().Result;
+
+                // ⭐ Sécurité parsing JSON
+                if (!httpResponse.IsSuccessStatusCode || string.IsNullOrWhiteSpace(responseText) || !responseText.Trim().StartsWith("{"))
+                {
+                    Console.WriteLine("Réponse API non JSON : " + responseText);
                     return new JObject();
+                }
+
+                return JObject.Parse(responseText);
             }
-            // récupération de l'information retournée par l'api
-            var json = httpResponse.Content.ReadAsStringAsync().Result; 
-            return JObject.Parse(json);
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur RecupDistant : " + ex.Message);
+                return new JObject();
+            }
         }
 
     }

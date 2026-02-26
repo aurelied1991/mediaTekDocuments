@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using MediaTekDocuments.model;
 using MediaTekDocuments.dal;
+using System.Linq;
 
 namespace MediaTekDocuments.controller
 {
@@ -95,6 +96,17 @@ namespace MediaTekDocuments.controller
         public bool CreerExemplaire(Exemplaire exemplaire)
         {
             return access.CreerExemplaire(exemplaire);
+        }
+
+        /// <summary>
+        /// Supprime un document de la bdd
+        /// </summary>
+        /// <param name="typeElement"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool SupprimerDocument(string typeElement, string id)
+        {
+            return access.SupprimerDocument(typeElement, id);
         }
     }
 }

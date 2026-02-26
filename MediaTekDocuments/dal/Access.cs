@@ -7,6 +7,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Linq;
+using System.Data.SqlTypes;
 
 namespace MediaTekDocuments.dal
 {
@@ -37,6 +38,12 @@ namespace MediaTekDocuments.dal
         private const string POST = "POST";
         /// <summary>
         /// méthode HTTP pour update
+        /// </summary>>
+        private const string PUT = "PUT";
+        /// <summary>
+        /// méthode HTTP pour delete
+        /// </summary>
+        private const string DELETE = "DELETE";
 
         /// <summary>
         /// Méthode privée pour créer un singleton
@@ -164,6 +171,69 @@ namespace MediaTekDocuments.dal
         }
 
         /// <summary>
+        /// Ajout d'un document (livre, dvd ou revue) en base de données
+        /// </summary>
+        /// <param name="typeElement"></param>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public bool AjouterDocument(string typeElement, Object element)
+        {
+            String jsonElement = JsonConvert.SerializeObject(element);
+
+            // IMPORTANT ⭐ Encodage URL du JSON
+            string parametres = "champs=" + Uri.EscapeDataString(jsonElement);
+
+            List<Object> liste = TraitementRecup<Object>(
+                POST,
+                typeElement,
+                parametres
+            );
+
+            return liste != null;
+        }
+
+        /// <summary>
+        /// Modification d'un document (livre, dvd ou revue) en base de données
+        /// </summary>
+        /// <param name="typeElement"></param>
+        /// <param name="element"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool ModifierDocument(string typeElement, object element, string id)
+        {
+            string jsonElement = JsonConvert.SerializeObject(element);
+
+            string parametres = "champs=" + Uri.EscapeDataString(jsonElement);
+
+            List<Object> liste = TraitementRecup<Object>(
+                PUT,
+                typeElement + "/" + id,
+                parametres
+            );
+
+            return liste != null;
+        }
+
+        /// <summary>
+        /// Suppression d'un document (livre, dvd ou revue) en base de données
+        /// </summary>
+        /// <param name="typeElement"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool SupprimerDocument(string typeElement, string id)
+        {
+            string jsonIdElement = "{\"Id\":\"" + id + "\"}";
+
+            List<Object> liste = TraitementRecup<Object>(
+                DELETE,
+                typeElement + "/" + jsonIdElement,
+                null
+            );
+
+            return liste != null;
+        }
+
+        /// <summary>
         /// Traitement de la récupération du retour de l'api, avec conversion du json en liste pour les select (GET)
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -180,7 +250,7 @@ namespace MediaTekDocuments.dal
                 JObject retour = api.RecupDistant(methode, message, parametres);
                 // extraction du code retourné
                 String code = (String)retour["code"];
-                if (code.Equals("200"))
+                if (code == "200")
                 {
                     // dans le cas du GET (select), récupération de la liste d'objets
                     if (methode.Equals(GET))
@@ -197,7 +267,7 @@ namespace MediaTekDocuments.dal
             }catch(Exception e)
             {
                 Console.WriteLine("Erreur lors de l'accès à l'API : "+e.Message);
-                Environment.Exit(0);
+                return new List<T>();
             }
             return liste;
         }
