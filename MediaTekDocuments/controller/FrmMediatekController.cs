@@ -77,7 +77,6 @@ namespace MediaTekDocuments.controller
             return access.GetAllPublics();
         }
 
-
         /// <summary>
         /// récupère les exemplaires d'une revue
         /// </summary>
@@ -107,6 +106,68 @@ namespace MediaTekDocuments.controller
         public bool SupprimerDocument(string typeElement, string id)
         {
             return access.SupprimerDocument(typeElement, id);
+        }
+
+        /// <summary>
+        /// Récupère un document de la bdd à partir de son id
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="typeElement"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public T GetDocumentById<T>(string typeElement, string id)
+        {
+            return access.GetDocumentById<T>(typeElement, id);
+        }
+
+        /// <summary>
+        /// Récupère les commandes associées à un document
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<CommandeDocument> GetCommandesByDocument(string id)
+        {
+            return access.GetCommandesByDocument(id);
+        }
+
+        /// <summary>
+        /// Récupère la liste des états de suivi
+        /// </summary>
+        /// <returns></returns>
+        public List<Suivi> GetAllSuivis()
+        {
+            return access.GetAllSuivis();
+        }
+
+        /// <summary>
+        /// Crée une commande de document dans la bdd
+        /// </summary>
+        /// <param name="commandeDocument"></param>
+        /// <returns></returns>
+        public bool CreerCommandeDocument(CommandeDocument commandeDocument)
+        {
+            return access.CreerCommandeDocument(commandeDocument);
+        }
+
+        /// <summary>
+        /// Modifie l'état de suivi d'une commande de document dans la bdd
+        /// </summary>
+        /// <param name="idCommandeDocument"></param>
+        /// <param name="idSuivi"></param>
+        /// <returns></returns>
+        public bool ModifierSuiviCommandeDocument(string idCommandeDocument, string idSuivi)
+        {
+            return access.ModifierSuiviCommande(idCommandeDocument, idSuivi);
+        }
+
+        /// <summary>
+        /// Supprime une commande de document de la bdd
+        /// </summary>
+        /// <param name="idCommande"></param>
+        /// <returns></returns>
+        public bool SupprimerCommande(string idCommande)
+        {
+            return access.SupprimerCommande(idCommande);
         }
     }
 }

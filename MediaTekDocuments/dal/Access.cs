@@ -137,7 +137,6 @@ namespace MediaTekDocuments.dal
             return lesRevues;
         }
 
-
         /// <summary>
         /// Retourne les exemplaires d'une revue
         /// </summary>
@@ -148,6 +147,55 @@ namespace MediaTekDocuments.dal
             String jsonIdDocument = convertToJson("id", idDocument);
             List<Exemplaire> lesExemplaires = TraitementRecup<Exemplaire>(GET, "exemplaire/" + jsonIdDocument, null);
             return lesExemplaires;
+        }
+
+        /// <summary>
+        /// Retourne les commandes associées à un document (livre ou dvd) via l'API distante
+        /// </summary>
+        /// <param name="idDocument"></param>
+        /// <returns></returns>
+        public List<CommandeDocument> GetCommandesByDocument(string idDocument)
+        {
+            // Conversion en JSON comme les autres méthodes de l’API
+            String jsonIdDocument = convertToJson("idLivreDvd", idDocument);
+
+            List<CommandeDocument> lesCommandesDocuments =
+                TraitementRecup<CommandeDocument>(
+                    GET,
+                    "commandedocument/" + jsonIdDocument,
+                    null
+                );
+            return lesCommandesDocuments;
+        }
+
+        /// <summary>
+        /// Récupère un document à partir de son id via l'API distante
+        /// </summary>
+        /// <typeparam name="T"></typeparam> Type d'objet à récupérer
+        /// <param name="typeElement"></param> Route de l'API pour le type d'élément à récupérer
+        /// <param name="id"></param> Id du document à récupérer
+        /// <returns></returns>
+        public T GetDocumentById<T>(string typeElement, string id)
+        {
+            string jsonId = convertToJson("id", id);
+
+            List<T> elements =
+                TraitementRecup<T>(GET, typeElement + "/" + jsonId, null);
+
+            if (elements == null || elements.Count == 0)
+                return default;
+
+            return elements[0];
+        }
+
+        /// <summary>
+        /// Récupère tous les suivis de commandes à partir de l'API distante
+        /// </summary>
+        /// <returns></returns>
+        public List<Suivi> GetAllSuivis()
+        {
+            List<Suivi> lesSuivis = TraitementRecup<Suivi>(GET, "suivi", null);
+            return lesSuivis;
         }
 
         /// <summary>
@@ -258,6 +306,7 @@ namespace MediaTekDocuments.dal
                         String resultString = JsonConvert.SerializeObject(retour["result"]);
                         // construction de la liste d'objets à partir du retour de l'api
                         liste = JsonConvert.DeserializeObject<List<T>>(resultString, new CustomBooleanJsonConverter());
+                        Console.WriteLine(resultString);
                     }
                 }
                 else
@@ -270,6 +319,76 @@ namespace MediaTekDocuments.dal
                 return new List<T>();
             }
             return liste;
+        }
+
+        /// <summary>
+        /// Création d'une commande de document (livre ou dvd) en base de données
+        /// </summary>
+        /// <param name="commandeDocument">Commander à créer</param>
+        /// <returns>True si la création réussie</returns>
+        public bool CreerCommandeDocument(CommandeDocument commandeDocument)
+        {
+            String jsonCommande = JsonConvert.SerializeObject(
+                commandeDocument,
+                new CustomDateTimeConverter()
+            );
+
+            List<CommandeDocument> resultat =
+                TraitementRecup<CommandeDocument>(
+                    POST,
+                    "commandedocument",
+                    "champs=" + jsonCommande
+                );
+
+            return resultat != null;
+        }
+
+        /// <summary>
+        /// Modification de l'état de suivi d'une commande de document en base de données
+        /// </summary>
+        /// <param name="idCommande"></param>
+        /// <param name="idSuivi"></param>
+        /// <returns></returns>
+        public bool ModifierSuiviCommande(string idCommande, string idSuivi)
+        {
+            // Créer un objet anonyme contenant uniquement le champ à modifier
+            var champs = new
+            {
+                idSuivi = idSuivi
+            };
+
+            string jsonChamps = JsonConvert.SerializeObject(champs);
+            string parametres = "champs=" + Uri.EscapeDataString(jsonChamps);
+
+            List<Object> resultat = TraitementRecup<Object>(
+                PUT,
+                "commandedocument/" + idCommande,
+                parametres
+            );
+
+            return resultat != null;
+        }
+
+        /// <summary>
+        /// Suppression d'une commande
+        /// </summary>
+        public bool SupprimerCommande(string idCommande)
+        {
+            string jsonIdCommande = convertToJson("id", idCommande);
+
+            JObject retour =
+                api.RecupDistant(
+                    DELETE,
+                    "commandedocument/" + jsonIdCommande,
+                    null
+                );
+
+            if (retour == null)
+                return false;
+
+            string code = (string)retour["code"];
+
+            return code == "200";
         }
 
         /// <summary>

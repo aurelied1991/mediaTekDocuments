@@ -47,6 +47,7 @@
             this.btnValiderAjoutRevue = new System.Windows.Forms.Button();
             this.btnAnnulerAjoutRevue = new System.Windows.Forms.Button();
             this.txtPeriodicite = new System.Windows.Forms.TextBox();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             ((System.ComponentModel.ISupportInitialize)(this.nudDelaiMiseADispo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -288,5 +289,6 @@
         private System.Windows.Forms.Button btnValiderAjoutRevue;
         private System.Windows.Forms.Button btnAnnulerAjoutRevue;
         private System.Windows.Forms.TextBox txtPeriodicite;
+        private System.Drawing.Printing.PrintDocument printDocument1;
     }
 }

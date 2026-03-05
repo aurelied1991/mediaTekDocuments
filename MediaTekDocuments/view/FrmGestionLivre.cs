@@ -137,7 +137,7 @@ namespace MediaTekDocuments.view
             {
                 MessageBox.Show("Veuillez remplir tous les champs obligatoires");
                 return;
-}
+            }
             // Récupération des sélections des combobox
             var genreSelection = (Categorie)cboGenre.SelectedItem;
             var publicSelection = (Categorie)cboPublic.SelectedItem;
