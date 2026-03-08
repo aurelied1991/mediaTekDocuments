@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System.Configuration;
 using System.Linq;
 using System.Data.SqlTypes;
+using System.Net.NetworkInformation;
 
 namespace MediaTekDocuments.dal
 {
@@ -166,6 +167,41 @@ namespace MediaTekDocuments.dal
                     null
                 );
             return lesCommandesDocuments;
+        }
+
+        /// <summary>
+        /// Retourne les abonnements associés à une revue via l'API distante
+        /// </summary>
+        /// <param name="idRevue"></param>
+        /// <returns></returns>
+        public List<Abonnement> GetAllAbonnements(string idRevue)
+        {
+            string jsonIdRevue = convertToJson("idRevue", idRevue);
+
+            List<Abonnement> lesAbonnements =
+                TraitementRecup<Abonnement>(
+                    GET,
+                    "abonnement/" + jsonIdRevue,
+                    null
+                );
+
+            return lesAbonnements;
+        }
+
+        /// <summary>
+        /// Retourne les abonnements finissants dans les 30 prochains jours via l'API distante
+        /// </summary>
+        /// <returns></returns>
+        public List<AbonnementFinissant> GetAbonnementsFinissant()
+        {
+            List<AbonnementFinissant> lesAbonnements =
+                TraitementRecup<AbonnementFinissant>(
+                    GET,
+                    "abonnementfinissant",
+                    null
+                );
+
+            return lesAbonnements;
         }
 
         /// <summary>
@@ -389,6 +425,47 @@ namespace MediaTekDocuments.dal
             string code = (string)retour["code"];
 
             return code == "200";
+        }
+
+        /// <summary>
+        /// Création d'un abonnement de revue en base de données
+        /// </summary>
+        /// <param name="abonnement"></param>
+        /// <returns></returns>
+        public bool CreerAbonnementRevue(Abonnement abonnement)
+        {
+            string jsonAbonnement = JsonConvert.SerializeObject(
+                abonnement,
+                new CustomDateTimeConverter()
+            );
+
+            List<Abonnement> resultat =
+                TraitementRecup<Abonnement>(
+                    POST,
+                    "abonnement",
+                    "champs=" + jsonAbonnement
+                );
+
+            return resultat != null;
+        }
+
+        /// <summary>
+        /// Suppression d'un abonnement de revue de la bdd
+        /// </summary>
+        /// <param name="idCommande"></param>
+        /// <returns></returns>
+        public bool SupprimerAbonnementRevue(string idCommande)
+        {
+            string jsonId = convertToJson("id", idCommande);
+
+            JObject retour =
+                api.RecupDistant(
+                    DELETE,
+                    "abonnement/" + jsonId,
+                    null
+                );
+
+            return retour != null && (string)retour["code"] == "200";
         }
 
         /// <summary>

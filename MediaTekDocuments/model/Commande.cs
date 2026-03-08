@@ -15,7 +15,7 @@ namespace MediaTekDocuments.model
         /// <summary>
         /// Id de la commande : clé primaire de la table Commande
         /// </summary>
-        public string IdCommande { get; }
+        public string IdCommande { get; set; }
         /// <summary>
         /// Date de la commande : date à laquelle la commande a été passée
         /// </summary>
@@ -23,7 +23,7 @@ namespace MediaTekDocuments.model
         /// <summary>
         /// Montant de la commande : montant total de la commande
         /// </summary>
-        public double Montant { get; }
+        public double Montant { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Commande : initialise les propriétés de la commande

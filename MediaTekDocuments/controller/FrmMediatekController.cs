@@ -2,13 +2,14 @@
 using MediaTekDocuments.model;
 using MediaTekDocuments.dal;
 using System.Linq;
+using System;
 
 namespace MediaTekDocuments.controller
 {
     /// <summary>
     /// Contrôleur lié à FrmMediatek
     /// </summary>
-    class FrmMediatekController
+    public class FrmMediatekController
     {
         /// <summary>
         /// Objet d'accès aux données
@@ -140,6 +141,25 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
+        /// Récupère les abonnements associés à une revue
+        /// </summary>
+        /// <param name="idDocument"></param>
+        /// <returns></returns>
+        public List<Abonnement> GetAllAbonnements(string idDocument)
+        {
+            return access.GetAllAbonnements(idDocument);
+        }
+
+        /// <summary>
+        /// Récupère les abonnements finissant dans les 30 prochains jours
+        /// </summary>
+        /// <returns></returns>
+        public List<AbonnementFinissant> GetAbonnementsFinissant()
+        {
+            return access.GetAbonnementsFinissant();
+        }
+
+        /// <summary>
         /// Crée une commande de document dans la bdd
         /// </summary>
         /// <param name="commandeDocument"></param>
@@ -169,5 +189,39 @@ namespace MediaTekDocuments.controller
         {
             return access.SupprimerCommande(idCommande);
         }
+
+        /// <summary>
+        /// Crée un abonnement de revue dans la bdd
+        /// </summary>
+        /// <param name="abonnement"></param>
+        /// <returns></returns>
+        public bool CreerAbonnementRevue(Abonnement abonnement)
+        {
+            return access.CreerAbonnementRevue(abonnement);
+        }
+
+        /// <summary>
+        /// Supprime un abonnement de revue de la bdd
+        /// </summary>
+        /// <param name="idCommande"></param>
+        /// <returns></returns>
+        public bool SupprimerAbonnementRevue(string idCommande)
+        {
+            return access.SupprimerAbonnementRevue(idCommande);
+        }
+
+        /// <summary>
+        /// Vérifie si une parution de revue est comprise dans la période d'abonnement d'une revue
+        /// </summary>
+        /// <param name="dateCommande"></param>
+        /// <param name="dateFinAbonnement"></param>
+        /// <param name="dateParution"></param>
+        /// <returns></returns>
+        public bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
+        {
+            return dateParution >= dateCommande && dateParution <= dateFinAbonnement;
+        }
+
+
     }
 }
