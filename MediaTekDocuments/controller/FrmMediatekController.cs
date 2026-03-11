@@ -3,6 +3,7 @@ using MediaTekDocuments.model;
 using MediaTekDocuments.dal;
 using System.Linq;
 using System;
+using System.Security.Cryptography;
 
 namespace MediaTekDocuments.controller
 {
@@ -79,13 +80,22 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// récupère les exemplaires d'une revue
+        /// récupère les exemplaires d'un document
         /// </summary>
-        /// <param name="idDocuement">id de la revue concernée</param>
+        /// <param name="idDocuement">id du document concerné</param>
         /// <returns>Liste d'objets Exemplaire</returns>
-        public List<Exemplaire> GetExemplairesRevue(string idDocuement)
+        public List<Exemplaire> GetExemplaires(string idDocuement)
         {
-            return access.GetExemplairesRevue(idDocuement);
+            return access.GetExemplaires(idDocuement);
+        }
+
+        /// <summary>
+        /// Récupère la liste des états d'un exemplaire
+        /// </summary>
+        /// <returns></returns>
+        public List<Etat>GetAllEtats()
+        {
+            return access.GetAllEtats();
         }
 
         /// <summary>
@@ -222,6 +232,28 @@ namespace MediaTekDocuments.controller
             return dateParution >= dateCommande && dateParution <= dateFinAbonnement;
         }
 
+        /// <summary>
+        /// Modifie l'état d'un exemplaire d'un document dans la bdd
+        /// </summary>
+        /// <param name="idDocument"></param>
+        /// <param name="numero"></param>
+        /// <param name="idEtat"></param>
+        /// <returns></returns>
+        public bool ModifierEtatExemplaire(string idDocument, int numero, string idEtat)
+        {
+            return access.ModifierEtatExemplaire(idDocument, numero, idEtat);
+        }
+
+        /// <summary>
+        /// Supprime un exemplaire d'un document de la bdd
+        /// </summary>
+        /// <param name="idDocument"></param>
+        /// <param name="numero"></param>
+        /// <returns></returns>
+        public bool SupprimerExemplaire(string idDocument, int numero)
+        {
+            return access.SupprimerExemplaire(idDocument, numero);
+        }
 
     }
 }

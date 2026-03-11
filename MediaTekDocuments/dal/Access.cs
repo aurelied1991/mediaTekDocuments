@@ -139,15 +139,24 @@ namespace MediaTekDocuments.dal
         }
 
         /// <summary>
-        /// Retourne les exemplaires d'une revue
+        /// Retourne les exemplaires d'un document
         /// </summary>
-        /// <param name="idDocument">id de la revue concernée</param>
+        /// <param name="idDocument">id du document concerné</param>
         /// <returns>Liste d'objets Exemplaire</returns>
-        public List<Exemplaire> GetExemplairesRevue(string idDocument)
+        public List<Exemplaire> GetExemplaires(string idDocument)
         {
             String jsonIdDocument = convertToJson("id", idDocument);
             List<Exemplaire> lesExemplaires = TraitementRecup<Exemplaire>(GET, "exemplaire/" + jsonIdDocument, null);
             return lesExemplaires;
+        }
+
+        /// <summary>
+        /// Retourne tous les états à partir de la BDD
+        /// </summary>
+        /// <returns></returns>
+        public List<Etat> GetAllEtats()
+        {
+            return TraitementRecup<Etat>(GET, "etat", null);
         }
 
         /// <summary>
@@ -466,6 +475,56 @@ namespace MediaTekDocuments.dal
                 );
 
             return retour != null && (string)retour["code"] == "200";
+        }
+
+        /// <summary>
+        /// Modification de l'état d'un exemplaire d'un document en base de données
+        /// </summary>
+        /// <param name="idDocument"></param>
+        /// <param name="numero"></param>
+        /// <param name="idEtat"></param>
+        /// <returns></returns>
+        public bool ModifierEtatExemplaire(string idDocument, int numero, string idEtat)
+        {
+            var champs = new
+            {
+                numero = numero,
+                idEtat = idEtat
+            };
+
+            string json = JsonConvert.SerializeObject(champs);
+            string parametres = "champs=" + Uri.EscapeDataString(json);
+
+            List<Object> liste = TraitementRecup<Object>(
+                PUT,
+                "exemplaire/" + idDocument,
+                parametres
+            );
+
+            return liste != null;
+        }
+
+        /// <summary>
+        /// Suppression d'un exemplaire d'un document de la bdd
+        /// </summary>
+        /// <param name="idExemplaire"></param>
+        /// <param name="numero"></param>
+        /// <returns></returns>
+        public bool SupprimerExemplaire(string idExemplaire, int numero)
+        {
+            string json = $"{{\"id\":\"{idExemplaire}\",\"numero\":{numero}}}";
+
+            JObject retour =
+                api.RecupDistant(
+                    DELETE,
+                    "exemplaire/" + json,
+                    null
+                );
+
+            if (retour == null)
+                return false;
+
+            return (string)retour["code"] == "200";
         }
 
         /// <summary>
