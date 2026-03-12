@@ -32,18 +32,62 @@ namespace MediaTekDocuments.view
         private const string RELANCEE = "0004";
         public const string LIBELLE_EN_COURS = "en cours";
         private bool chargementCombo = false;
+        private Utilisateur utilisateurConnecte;
 
 
         /// <summary>
         /// Constructeur : création du contrôleur lié à ce formulaire
         /// </summary>
-        internal FrmMediatek()
+        // Constructeur par défaut (si besoin)
+        public FrmMediatek()
         {
             InitializeComponent();
             controller = new FrmMediatekController();
-            FrmAlerteAbonnement frmAlerte =
-                new FrmAlerteAbonnement(controller);
-            frmAlerte.ShowDialog();
+        }
+
+        // Nouveau constructeur avec l'utilisateur connecté
+        public FrmMediatek(Utilisateur utilisateur) : this()  // appelle le constructeur par défaut
+        {
+            utilisateurConnecte = utilisateur;
+            GererDroits();
+            // vérification droits
+            if (utilisateurConnecte.IdService == 1 || utilisateurConnecte.IdService == 2) // Administratif ou Administrateur
+            {
+                FrmAlerteAbonnement frmAlerte = new FrmAlerteAbonnement(controller);
+                frmAlerte.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Gère les droits d'accès en fonction du service de l'utilisateur connecté. Si l'utilisateur appartient au service 3 (Lecteur), certaines fonctionnalités sont désactivées pour restreindre l'accès à des actions spécifiques, telles que la gestion des commandes et des exemplaires, afin de garantir que les utilisateurs avec des droits limités ne puissent pas effectuer des actions réservées aux administrateurs ou au personnel administratif. Cette méthode est appelée lors de l'initialisation du formulaire pour appliquer les restrictions d'accès appropriées dès le départ, assurant ainsi une expérience utilisateur conforme aux rôles et responsabilités de chaque utilisateur dans l'application.
+        /// </summary>
+        private void GererDroits()
+        {
+            if (utilisateurConnecte.IdService == 3)
+            {
+                // désactivr onglets
+                TabPages.TabPages.Remove(tabCommandesLivres);
+                TabPages.TabPages.Remove(tabCommandesDvd);
+                TabPages.TabPages.Remove(tabCommandesRevues);
+                TabPages.TabPages.Remove(tabReceptionRevue);
+
+                btnAddLivre.Enabled = false;
+                btnModifLivre.Enabled = false;
+                btnDeleteLivre.Enabled = false;
+
+                btnAddDVD.Enabled = false;
+                btnModifDVD.Enabled = false;
+                btnDeleteDVD.Enabled = false;
+
+                btnAddRevue.Enabled = false;
+                btnModifRevue.Enabled = false;
+                btnDeleteRevue.Enabled = false;
+
+
+                grpExemplaireDvd.Enabled = false;
+                grbExemplairesLivre.Enabled = false;
+
+            }
         }
 
         /// <summary>
@@ -181,7 +225,10 @@ namespace MediaTekDocuments.view
                 {
                     List<Livre> livres = new List<Livre>() { livre };
                     RemplirLivresListe(livres);
-                    grbExemplairesLivre.Enabled = true;
+                    if (utilisateurConnecte.IdService == 1 || utilisateurConnecte.IdService == 2)
+                    {
+                        grbExemplairesLivre.Enabled = true; // active seulement pour admin/administratif
+                    }
                     AfficheExemplairesLivre(livre.Id);
                 }
                 else
@@ -803,8 +850,11 @@ namespace MediaTekDocuments.view
                 {
                     List<Dvd> Dvd = new List<Dvd>() { dvd };
                     RemplirDvdListe(Dvd);
-                    grpExemplaireDvd.Enabled = true;
-                    AfficheExemplairesDvd(dvd.Id);   // Affiche la liste des exemplaires du DVD
+                    if (utilisateurConnecte.IdService == 1 || utilisateurConnecte.IdService == 2)
+                    {
+                        grpExemplaireDvd.Enabled = true; // active seulement pour admin/administratif
+                    }
+                    AfficheExemplairesDvd(dvd.Id);
                 }
                 else
                 {

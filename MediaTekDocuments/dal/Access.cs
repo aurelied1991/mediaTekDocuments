@@ -9,6 +9,8 @@ using System.Configuration;
 using System.Linq;
 using System.Data.SqlTypes;
 using System.Net.NetworkInformation;
+using System.Windows.Forms;
+using MediaTekDocuments.view;
 
 namespace MediaTekDocuments.dal
 {
@@ -63,6 +65,40 @@ namespace MediaTekDocuments.dal
                 Console.WriteLine(e.Message);
                 Environment.Exit(0);
             }
+        }
+
+        /// <summary>
+        /// Authentifie un utilisateur à partir de son login et de son mot de passe, en comparant le hash du mot de passe avec celui stocké en base de données
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public Utilisateur AuthentifierUtilisateur(string login, string password)
+        {
+            String jsonLogin = convertToJson("login", login);
+
+            // récupère la liste des utilisateurs correspondant au login
+            List<Utilisateur> utilisateurs = TraitementRecup<Utilisateur>(GET, "utilisateur/" + jsonLogin, null);
+
+            if (utilisateurs != null && utilisateurs.Count > 0)
+            {
+                Utilisateur utilisateur = utilisateurs[0];
+
+                // debug : voir ce qu'on récupère exactement
+                MessageBox.Show($"Login récupéré: {utilisateur.Login}\nMot de passe récupéré: '{utilisateur.MotDePasse}'\nIdService: {utilisateur.IdService}");
+
+                // Compare le hash du mot de passe avec celui en BDD
+                if (utilisateur.MotDePasse.Equals(FrmAuthentification.HasherMotDePasse(password)))
+                {
+                    return utilisateur;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Utilisateur non trouvé !");
+            }
+
+            return null;
         }
 
         /// <summary>
