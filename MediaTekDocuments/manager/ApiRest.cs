@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Net.Http;
-using Newtonsoft.Json.Linq;
 
 namespace MediaTekDocuments.manager
 {
@@ -29,7 +29,7 @@ namespace MediaTekDocuments.manager
         /// </summary>
         /// <param name="uriApi">adresse de l'api</param>
         /// <param name="authenticationString">chaîne d'authentification</param>
-        private ApiRest(String uriApi, String authenticationString="")
+        private ApiRest(String uriApi, String authenticationString = "")
         {
             httpClient = new HttpClient() { BaseAddress = new Uri(uriApi) };
             // prise en compte dans l'url de l'authentificaiton (basic authorization), si elle n'est pas vide
@@ -48,7 +48,7 @@ namespace MediaTekDocuments.manager
         /// <returns></returns>
         public static ApiRest GetInstance(String uriApi, String authenticationString)
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = new ApiRest(uriApi, authenticationString);
             }
@@ -119,6 +119,5 @@ namespace MediaTekDocuments.manager
                 return new JObject();
             }
         }
-
     }
 }

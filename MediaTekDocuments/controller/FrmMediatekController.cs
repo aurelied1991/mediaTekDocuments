@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using MediaTekDocuments.dal;
 using MediaTekDocuments.model;
-using MediaTekDocuments.dal;
-using System.Linq;
 using System;
-using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace MediaTekDocuments.controller
 {
@@ -93,7 +91,7 @@ namespace MediaTekDocuments.controller
         /// Récupère la liste des états d'un exemplaire
         /// </summary>
         /// <returns></returns>
-        public List<Etat>GetAllEtats()
+        public List<Etat> GetAllEtats()
         {
             return access.GetAllEtats();
         }
@@ -227,7 +225,7 @@ namespace MediaTekDocuments.controller
         /// <param name="dateFinAbonnement"></param>
         /// <param name="dateParution"></param>
         /// <returns></returns>
-        public bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
+        public static bool ParutionDansAbonnement(DateTime dateCommande, DateTime dateFinAbonnement, DateTime dateParution)
         {
             return dateParution >= dateCommande && dateParution <= dateFinAbonnement;
         }
@@ -254,6 +252,5 @@ namespace MediaTekDocuments.controller
         {
             return access.SupprimerExemplaire(idDocument, numero);
         }
-
     }
 }

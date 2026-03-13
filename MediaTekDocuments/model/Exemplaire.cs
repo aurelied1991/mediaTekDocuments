@@ -50,6 +50,5 @@ namespace MediaTekDocuments.model
             this.Id = idDocument;
             this.LibelleEtat = libelleEtat;
         }
-
     }
 }

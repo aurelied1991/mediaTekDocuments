@@ -1,10 +1,7 @@
 ﻿using MediaTekDocuments.dal;
 using MediaTekDocuments.model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MediaTekDocuments.controller
 {
@@ -16,7 +13,7 @@ namespace MediaTekDocuments.controller
         /// <summary>
         /// Instance de la classe d'accès aux données pour pouvoir appeler les méthodes d'ajout, de modification et de récupération des documents
         /// </summary>
-        private Access access = Access.GetInstance();
+        private readonly Access access = Access.GetInstance();
 
         /// <summary>
         /// Méthode de création d'un livre : appelle la méthode d'ajout de document de la classe d'accès aux données en précisant le type de document et le livre à ajouter
@@ -25,7 +22,7 @@ namespace MediaTekDocuments.controller
         /// <returns></returns>
         public bool CreerLivre(Livre livre)
         {
-            return access.AjouterDocument("livre",livre);    
+            return access.AjouterDocument("livre", livre);
         }
 
         /// <summary>

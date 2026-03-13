@@ -2,17 +2,13 @@
 using MediaTekDocuments.dal;
 using MediaTekDocuments.model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MediaTekDocuments.view
 {
+    /// <summary>
+    /// Fenêtre de gestion des dvd : permet d'ajouter un nouveau dvd ou de modifier un dvd existant en fonction du constructeur utilisé (avec ou sans paramètre), contient les champs de saisie des informations d'un dvd et les boutons de validation et d'annulation, utilise le controller FrmGestionDocumentsController pour effectuer les opérations de création et de modification d'un dvd dans la base de données, utilise la classe métier Dvd pour stocker les informations du dvd en cours de modification et pour créer un nouvel objet Dvd à partir des informations saisies dans les champs
+    /// </summary>
     public partial class FrmGestionDvd : Form
     {
         /// <summary>
@@ -27,10 +23,6 @@ namespace MediaTekDocuments.view
         /// Instance de la classe métier Dvd pour stocker le dvd en cours de modification (null si ajout)
         /// </summary>
         private Dvd dvdActuel = null;
-        /// <summary>
-        /// Instance de la classe d'accès aux données pour pouvoir appeler les méthodes d'ajout, de modification et de récupération des documents
-        /// </summary>
-        private Access access = Access.GetInstance();
 
         /// <summary>
         /// Constructeur de la fenêtre de gestion des dvd : différencie les cas d'ajout et de modification en fonction de la présence ou non d'un dvd en paramètre, remplit les champs si modification et adapte les éléments de la fenêtre (titre, texte du bouton de validation, etc.)
@@ -65,28 +57,27 @@ namespace MediaTekDocuments.view
         /// <param name="e"></param>
         private void FrmGestionDvd_Load(object sender, EventArgs e)
         {
+
+            var access = Access.GetInstance();
+
+            cboGenre.DataSource = access.GetAllGenres();
+            cboGenre.DisplayMember = "Libelle";
+            cboGenre.ValueMember = "Id";
+
+            cboPublic.DataSource = access.GetAllPublics();
+            cboPublic.DisplayMember = "Libelle";
+            cboPublic.ValueMember = "Id";
+
+
+            cboRayon.DataSource = access.GetAllRayons();
+            cboRayon.DisplayMember = "Libelle";
+            cboRayon.ValueMember = "Id";
+
+            if (!modifDvd)
             {
-                var access = Access.GetInstance();
-
-                cboGenre.DataSource = access.GetAllGenres();
-                cboGenre.DisplayMember = "Libelle";
-                cboGenre.ValueMember = "Id";
-
-                cboPublic.DataSource = access.GetAllPublics();
-                cboPublic.DisplayMember = "Libelle";
-                cboPublic.ValueMember = "Id";
-
-
-                cboRayon.DataSource = access.GetAllRayons();
-                cboRayon.DisplayMember = "Libelle";
-                cboRayon.ValueMember = "Id";
-
-                if (!modifDvd)
-                {
-                    cboGenre.SelectedIndex = -1;
-                    cboPublic.SelectedIndex = -1;
-                    cboRayon.SelectedIndex = -1;
-                }
+                cboGenre.SelectedIndex = -1;
+                cboPublic.SelectedIndex = -1;
+                cboRayon.SelectedIndex = -1;
             }
         }
 
@@ -146,7 +137,7 @@ namespace MediaTekDocuments.view
                         titre: txtTitre.Text,
                         image: txtCheminImage.Text,
                         synopsis: txtSynopsis.Text,
-                        realisateur: txtRealisateur.Text,  
+                        realisateur: txtRealisateur.Text,
                         duree: (int)nudDuree.Value,
                         idGenre: genreSelection.Id,
                         genre: genreSelection.Libelle,
@@ -198,8 +189,8 @@ namespace MediaTekDocuments.view
                 if (ok)
                 {
                     MessageBox.Show("Dvd ajouté avec succès !");
-                    this.DialogResult = DialogResult.OK;  // IMPORTANT
-                    this.Close();                        // ferme la fenêtre
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
                 else
                 {

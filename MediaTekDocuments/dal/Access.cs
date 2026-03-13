@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MediaTekDocuments.manager;
 using MediaTekDocuments.model;
-using MediaTekDocuments.manager;
+using MediaTekDocuments.view;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Data.SqlTypes;
-using System.Net.NetworkInformation;
 using System.Windows.Forms;
-using MediaTekDocuments.view;
 
 namespace MediaTekDocuments.dal
 {
@@ -22,7 +19,7 @@ namespace MediaTekDocuments.dal
         /// <summary>
         /// adresse de l'API
         /// </summary>
-        private static readonly string uriApi = "http://localhost/rest_mediatekdocuments/";
+        private static readonly string uriApi = ConfigurationManager.AppSettings["uriApi"];
         /// <summary>
         /// instance unique de la classe
         /// </summary>
@@ -58,8 +55,6 @@ namespace MediaTekDocuments.dal
             {
                 string connectionName = "MediaTekDocuments.Properties.Settings.mediatekAuthenticationString";
                 string authenticationString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
-                // TEST → affichage pour vérifier que ça a bien été récupéré
-                Console.WriteLine("AuthenticationString récupérée : " + authenticationString);
                 api = ApiRest.GetInstance(uriApi, authenticationString);
             }
             catch (Exception e)
@@ -86,9 +81,6 @@ namespace MediaTekDocuments.dal
             {
                 Utilisateur utilisateur = utilisateurs[0];
 
-                // debug : voir ce qu'on récupère exactement
-                MessageBox.Show($"Login récupéré: {utilisateur.Login}\nMot de passe récupéré: '{utilisateur.MotDePasse}'\nIdService: {utilisateur.IdService}");
-
                 // Compare le hash du mot de passe avec celui en BDD
                 if (utilisateur.MotDePasse.Equals(FrmAuthentification.HasherMotDePasse(password)))
                 {
@@ -109,7 +101,7 @@ namespace MediaTekDocuments.dal
         /// <returns>instance unique de la classe</returns>
         public static Access GetInstance()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = new Access();
             }
@@ -177,7 +169,7 @@ namespace MediaTekDocuments.dal
         }
 
         /// <summary>
-        /// Retourne les exemplaires d'un document
+        /// Retourne tous les exemplaires d'un document
         /// </summary>
         /// <param name="idDocument">id du document concerné</param>
         /// <returns>Liste d'objets Exemplaire</returns>
@@ -372,7 +364,7 @@ namespace MediaTekDocuments.dal
         /// <param name="message">information envoyée dans l'url</param>
         /// <param name="parametres">paramètres à envoyer dans le body, au format "chp1=val1&chp2=val2&..."</param>
         /// <returns>liste d'objets récupérés (ou liste vide)</returns>
-        private List<T> TraitementRecup<T> (String methode, String message, String parametres)
+        private List<T> TraitementRecup<T>(String methode, String message, String parametres)
         {
             // trans
             List<T> liste = new List<T>();
@@ -396,9 +388,10 @@ namespace MediaTekDocuments.dal
                 {
                     Console.WriteLine("code erreur = " + code + " message = " + (String)retour["message"]);
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
-                Console.WriteLine("Erreur lors de l'accès à l'API : "+e.Message);
+                Console.WriteLine("Erreur lors de l'accès à l'API : " + e.Message);
                 return new List<T>();
             }
             return liste;
@@ -437,7 +430,7 @@ namespace MediaTekDocuments.dal
             // Créer un objet anonyme contenant uniquement le champ à modifier
             var champs = new
             {
-                idSuivi = idSuivi
+                idSuivi
             };
 
             string jsonChamps = JsonConvert.SerializeObject(champs);
@@ -526,8 +519,8 @@ namespace MediaTekDocuments.dal
         {
             var champs = new
             {
-                numero = numero,
-                idEtat = idEtat
+                numero,
+                idEtat
             };
 
             string json = JsonConvert.SerializeObject(champs);
@@ -571,10 +564,12 @@ namespace MediaTekDocuments.dal
         /// <param name="nom"></param>
         /// <param name="valeur"></param>
         /// <returns>couple au format json</returns>
-        private String convertToJson(Object nom, Object valeur)
+        private static String convertToJson(Object nom, Object valeur)
         {
-            Dictionary<Object, Object> dictionary = new Dictionary<Object, Object>();
-            dictionary.Add(nom, valeur);
+            var dictionary = new Dictionary<object, object>
+            {
+                { nom, valeur }
+            };
             return JsonConvert.SerializeObject(dictionary);
         }
 
@@ -606,6 +601,5 @@ namespace MediaTekDocuments.dal
                 serializer.Serialize(writer, value);
             }
         }
-
     }
 }

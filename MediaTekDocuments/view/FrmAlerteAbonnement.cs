@@ -2,20 +2,26 @@
 using MediaTekDocuments.model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MediaTekDocuments.view
 {
+    /// <summary>
+    /// Classe représentant la fenêtre d'alerte d'abonnement, qui affiche une liste des abonnements finissant dans moins de 30 jours pour les revues de la médiathèque
+    /// </summary>
     public partial class FrmAlerteAbonnement : Form
     {
+        /// <summary>
+        /// BindingSource pour la liste des abonnements finissant, utilisé pour lier les données à un DataGridView et faciliter l'affichage de la liste des abonnements finissant dans la fenêtre d'alerte d'abonnement
+        /// </summary>
         private readonly BindingSource bdgAbonnementsFinissantListe = new BindingSource();
+        /// <summary>
+        /// Liste des abonnements finissant, qui contient les données des abonnements finissant récupérées à partir du contrôleur et utilisées pour remplir le DataGridView dans la fenêtre d'alerte d'abonnement
+        /// </summary>
         private List<AbonnementFinissant> lesAbonnementsFinissant = new List<AbonnementFinissant>();
+        /// <summary>
+        /// Référence au contrôleur de FrmMediatek, qui est utilisée pour accéder aux données nécessaires à l'affichage de la liste des abonnements finissant dans la fenêtre d'alerte d'abonnement
+        /// </summary>
         private FrmMediatekController controller;
 
         /// <summary>
@@ -36,7 +42,6 @@ namespace MediaTekDocuments.view
         private void FrmAlerteAbonnement_Load(object sender, EventArgs e)
         {
             lesAbonnementsFinissant = controller.GetAbonnementsFinissant();
-
             RemplirAbonnementsFinissantListe(lesAbonnementsFinissant);
         }
 

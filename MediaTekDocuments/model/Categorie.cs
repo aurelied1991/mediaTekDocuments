@@ -6,9 +6,20 @@ namespace MediaTekDocuments.model
     /// </summary>
     public class Categorie
     {
+        /// <summary>
+        /// Id de la catégorie : clé primaire de la table Categorie
+        /// </summary>
         public string Id { get; }
+        /// <summary>
+        /// Libellé de la catégorie : nom de la catégorie (ex : "Roman", "Science-fiction", "Adulte", "Enfant", etc.)
+        /// </summary>
         public string Libelle { get; }
 
+        /// <summary>
+        /// Constructeur de la classe Categorie
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="libelle"></param>
         public Categorie(string id, string libelle)
         {
             this.Id = id;
@@ -23,6 +34,5 @@ namespace MediaTekDocuments.model
         {
             return this.Libelle;
         }
-
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MediaTekDocuments.model
 {
@@ -14,7 +10,7 @@ namespace MediaTekDocuments.model
         /// <summary>
         /// Titre de la revue : titre de la revue pour laquelle l'abonnement est en train de se terminer
         /// </summary>
-        public string TitreRevue { get; set; }
+        public string TitreRevue { get; }
         /// <summary>
         /// Date de fin d'abonnement : date à laquelle l'abonnement prend fin, utilisée pour déterminer si l'abonnement est en train de se terminer ou non
         /// </summary>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediaTekDocuments.model
+﻿namespace MediaTekDocuments.model
 {
     /// <summary>
     /// Représente un utilisateur de l'application, avec ses informations d'identification et son service associé.
@@ -42,6 +36,5 @@ namespace MediaTekDocuments.model
             this.MotDePasse = motDePasse;
             this.IdService = idService;
         }
-
     }
 }

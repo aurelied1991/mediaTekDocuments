@@ -1,14 +1,8 @@
 ﻿using MediaTekDocuments.controller;
 using MediaTekDocuments.model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MediaTekDocuments.view
@@ -79,8 +73,8 @@ namespace MediaTekDocuments.view
                 }
 
                 FrmMediatek frm = new FrmMediatek(utilisateurConnecte);
-                this.Hide();          
-                frm.ShowDialog();    
+                this.Hide();
+                frm.ShowDialog();
                 this.Show();
                 txtLogin.Clear();
                 txtMdp.Clear();

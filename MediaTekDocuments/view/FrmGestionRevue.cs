@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace MediaTekDocuments.view
 {
+    /// <summary>
+    /// Fenêtre de gestion d'une revue : permet d'ajouter une nouvelle revue ou de modifier une revue existante en fonction du contexte d'appel, contient les champs de saisie des informations de la revue (numéro de document, titre, périodicité, délai de mise à disposition, image, genre, public et rayon), et les boutons de validation et d'annulation de l'opération
+    /// </summary>
     public partial class FrmGestionRevue : Form
     {
         /// <summary>
@@ -20,10 +23,6 @@ namespace MediaTekDocuments.view
         /// Instance de la revue actuelle pour stocker les informations de la revue à modifier et les comparer avec les nouvelles valeurs saisies par l'utilisateur avant de lancer la modification dans la base de données
         /// </summary>
         private Revue revueActuelle = null;
-        /// <summary>
-        /// Instance de la classe d'accès aux données pour pouvoir appeler les méthodes d'ajout, de modification et de récupération des documents, des genres, des publics et des rayons
-        /// </summary>
-        private Access access = Access.GetInstance();
 
         /// <summary>
         /// Constructeur de la fenêtre de gestion d'une revue : différencie les cas d'ajout et de modification en fonction de la présence ou non d'une revue en paramètre, remplit les champs de la fenêtre avec les informations de la revue à modifier et adapte le titre et le texte du bouton de validation en conséquence
@@ -185,8 +184,8 @@ namespace MediaTekDocuments.view
                 if (ok)
                 {
                     MessageBox.Show("Revue ajoutée avec succès !");
-                    this.DialogResult = DialogResult.OK;  // IMPORTANT
-                    this.Close();                        // ferme la fenêtre
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();                      
                 }
                 else
                 {

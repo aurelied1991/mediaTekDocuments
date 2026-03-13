@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using MediaTekDocuments.controller;
 using MediaTekDocuments.dal;
-using Newtonsoft.Json;
 using MediaTekDocuments.model;
-using MediaTekDocuments.controller;
+using System;
+using System.Windows.Forms;
 
 
 namespace MediaTekDocuments.view
@@ -33,10 +24,6 @@ namespace MediaTekDocuments.view
         /// Instance du livre actuel pour la modification : permet de remplir les champs du formulaire avec les informations du livre à modifier et de récupérer son id pour la modification
         /// </summary>
         private Livre livreActuel = null;
-        /// <summary>
-        /// Instance de la classe d'accès aux données pour pouvoir appeler les méthodes d'ajout, de modification et de récupération des documents (notamment pour remplir les combobox avec les genres, publics et rayons disponibles)
-        /// </summary>
-        private Access access = Access.GetInstance();
 
         /// <summary>
         /// Constructeur du formulaire de gestion des livres : si un livre est passé en paramètre, le formulaire est en mode modification et les champs sont remplis avec les informations du livre, sinon le formulaire est en mode ajout et les champs sont vides
@@ -152,7 +139,7 @@ namespace MediaTekDocuments.view
                     MessageBoxIcon.Question) == DialogResult.Yes)
                 {
 
-                    // Création nouvel objet modifié (objet métier immuable ⭐)
+                    // Création nouvel objet modifié
                     Livre livreModifie = new Livre(
                         id: livreActuel.Id,
                         titre: txtTitre.Text,
@@ -182,43 +169,43 @@ namespace MediaTekDocuments.view
             // CAS AJOUT
             if (MessageBox.Show("Êtes-vous sûr de vouloir ajouter ce nouveau livre ?",
                     "Confirmer l'ajout", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                //Vérification ID disponible
+                if (!controllerLivres.VerifierIdDisponible(txtLivreAjoutNumero.Text.Trim()))
                 {
-                    //Vérification ID disponible
-                    if (!controllerLivres.VerifierIdDisponible(txtLivreAjoutNumero.Text.Trim()))
-                    {
-                        MessageBox.Show("Ce numéro de document existe déjà");
-                        return;
-                    }
-                   
-                    // Création du Livre avec le constructeur complet
-                    Livre nouveauLivre = new Livre(
-                        id: txtLivreAjoutNumero.Text.Trim(),
-                        titre: txtTitre.Text,
-                        image: txtCheminImage.Text,
-                        isbn: txtISBN.Text,
-                        auteur: txtAuteur.Text,
-                        collection: txtCollection.Text,
-                        idGenre: genreSelection.Id,
-                        genre: genreSelection.Libelle,
-                        idPublic: publicSelection.Id,
-                        lePublic: publicSelection.Libelle,
-                        idRayon: rayonSelection.Id,
-                        rayon: rayonSelection.Libelle
-                    );
-
-                    bool ok = controllerLivres.CreerLivre(nouveauLivre);
-
-                    if (ok)
-                    {
-                        MessageBox.Show("Livre ajouté avec succès !");
-                        this.DialogResult = DialogResult.OK;  // IMPORTANT
-                        this.Close();                        // ferme la fenêtre
-                    }
-                    else
-                    {
-                        MessageBox.Show("Erreur lors de l'ajout du livre.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Ce numéro de document existe déjà");
+                    return;
                 }
+
+                // Création du Livre avec le constructeur complet
+                Livre nouveauLivre = new Livre(
+                    id: txtLivreAjoutNumero.Text.Trim(),
+                    titre: txtTitre.Text,
+                    image: txtCheminImage.Text,
+                    isbn: txtISBN.Text,
+                    auteur: txtAuteur.Text,
+                    collection: txtCollection.Text,
+                    idGenre: genreSelection.Id,
+                    genre: genreSelection.Libelle,
+                    idPublic: publicSelection.Id,
+                    lePublic: publicSelection.Libelle,
+                    idRayon: rayonSelection.Id,
+                    rayon: rayonSelection.Libelle
+                );
+
+                bool ok = controllerLivres.CreerLivre(nouveauLivre);
+
+                if (ok)
+                {
+                    MessageBox.Show("Livre ajouté avec succès !");
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Erreur lors de l'ajout du livre.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
             else
             {
                 MessageBox.Show("Veuillez remplir tous les champs obligatoires : titre, auteur, n° de document, rayon, public et genre", "Information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
