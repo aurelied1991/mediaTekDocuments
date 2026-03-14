@@ -6,8 +6,6 @@ namespace MediaTekDocuments.controller.Tests
     [TestClass()]
     public class FrmMediatekControllerTests
     {
-        private readonly FrmMediatekController controller = new FrmMediatekController();
-
         private readonly DateTime dateCommande = new DateTime(2026, 2, 1);
         private readonly DateTime dateFinAbonnement = new DateTime(2026, 2, 28);
 
@@ -19,7 +17,7 @@ namespace MediaTekDocuments.controller.Tests
         {
             DateTime dateParution = new DateTime(2026, 2, 15);
 
-            bool resultat = controller.ParutionDansAbonnement(
+            bool resultat = FrmMediatekController.ParutionDansAbonnement(
                 dateCommande,
                 dateFinAbonnement,
                 dateParution
@@ -34,7 +32,7 @@ namespace MediaTekDocuments.controller.Tests
         [TestMethod]
         public void ParutionEstValideSiEgaleDateCommande()
         {
-            bool resultat = controller.ParutionDansAbonnement(
+            bool resultat = FrmMediatekController.ParutionDansAbonnement(
                 dateCommande,
                 dateFinAbonnement,
                 dateCommande
@@ -49,7 +47,7 @@ namespace MediaTekDocuments.controller.Tests
         [TestMethod]
         public void ParutionEstValideSiEgaleDateFinAbonnement()
         {
-            bool resultat = controller.ParutionDansAbonnement(
+            bool resultat = FrmMediatekController.ParutionDansAbonnement(
                 dateCommande,
                 dateFinAbonnement,
                 dateFinAbonnement
@@ -66,7 +64,7 @@ namespace MediaTekDocuments.controller.Tests
         {
             DateTime dateParution = new DateTime(2026, 1, 1);
 
-            bool resultat = controller.ParutionDansAbonnement(
+            bool resultat = FrmMediatekController.ParutionDansAbonnement(
                 dateCommande,
                 dateFinAbonnement,
                 dateParution
@@ -83,7 +81,7 @@ namespace MediaTekDocuments.controller.Tests
         {
             DateTime dateParution = new DateTime(2026, 3, 1);
 
-            bool resultat = controller.ParutionDansAbonnement(
+            bool resultat = FrmMediatekController.ParutionDansAbonnement(
                 dateCommande,
                 dateFinAbonnement,
                 dateParution
