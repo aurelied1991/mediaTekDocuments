@@ -24,7 +24,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// getter sur la liste des genres
+        /// Getter sur la liste des genres
         /// </summary>
         /// <returns>Liste d'objets Genre</returns>
         public List<Categorie> GetAllGenres()
@@ -33,7 +33,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// getter sur la liste des livres
+        /// Getter sur la liste des livres
         /// </summary>
         /// <returns>Liste d'objets Livre</returns>
         public List<Livre> GetAllLivres()
@@ -42,7 +42,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// getter sur la liste des Dvd
+        /// Getter sur la liste des Dvd
         /// </summary>
         /// <returns>Liste d'objets dvd</returns>
         public List<Dvd> GetAllDvd()
@@ -51,7 +51,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// getter sur la liste des revues
+        /// Getter sur la liste des revues
         /// </summary>
         /// <returns>Liste d'objets Revue</returns>
         public List<Revue> GetAllRevues()
@@ -60,7 +60,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// getter sur les rayons
+        /// Getter sur les rayons
         /// </summary>
         /// <returns>Liste d'objets Rayon</returns>
         public List<Categorie> GetAllRayons()
@@ -69,7 +69,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// getter sur les publics
+        /// Getter sur les publics
         /// </summary>
         /// <returns>Liste d'objets Public</returns>
         public List<Categorie> GetAllPublics()
@@ -78,7 +78,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// récupère les exemplaires d'un document
+        /// Récupère les exemplaires d'un document
         /// </summary>
         /// <param name="idDocuement">id du document concerné</param>
         /// <returns>Liste d'objets Exemplaire</returns>

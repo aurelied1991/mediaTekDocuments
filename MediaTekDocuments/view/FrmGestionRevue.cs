@@ -7,27 +7,27 @@ using System.Windows.Forms;
 namespace MediaTekDocuments.view
 {
     /// <summary>
-    /// Fenêtre de gestion d'une revue : permet d'ajouter une nouvelle revue ou de modifier une revue existante en fonction du contexte d'appel, contient les champs de saisie des informations de la revue (numéro de document, titre, périodicité, délai de mise à disposition, image, genre, public et rayon), et les boutons de validation et d'annulation de l'opération
+    /// Formulaire de gestion d'une revue : ajout ou modification
     /// </summary>
     public partial class FrmGestionRevue : Form
     {
         /// <summary>
-        /// Controller pour la gestion des documents : contient les méthodes de création, modification et vérification d'un id de document
+        /// Controller pour gérer la création et modification de revues
         /// </summary>
         private FrmGestionDocumentsController controllerRevue;
         /// <summary>
-        /// Booléen pour différencier les cas d'ajout et de modification d'une revue : true si modification, false si ajout
+        /// Indique si l'opération est une modification (true) ou un ajout (false)
         /// </summary>
         private bool modifRevue = false;
         /// <summary>
-        /// Instance de la revue actuelle pour stocker les informations de la revue à modifier et les comparer avec les nouvelles valeurs saisies par l'utilisateur avant de lancer la modification dans la base de données
+        /// Revue actuelle à modifier
         /// </summary>
         private Revue revueActuelle = null;
 
         /// <summary>
-        /// Constructeur de la fenêtre de gestion d'une revue : différencie les cas d'ajout et de modification en fonction de la présence ou non d'une revue en paramètre, remplit les champs de la fenêtre avec les informations de la revue à modifier et adapte le titre et le texte du bouton de validation en conséquence
+        /// Constructeur : initialise le formulaire en fonction de la revue passée en paramètre (null = ajout)
         /// </summary>
-        /// <param name="revue"></param>
+        /// <param name="revue">Revue à modifier ou null pour un ajout</param>
         public FrmGestionRevue(Revue revue = null)
         {
             InitializeComponent();
@@ -51,7 +51,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode d'initialisation de la fenêtre : remplit les combobox avec les données des genres, des publics et des rayons récupérées dans la base de données, et sélectionne les éléments correspondants aux informations de la revue à modifier si on est en cas de modification
+        /// Chargement du formulaire : remplit les combobox avec les genres, publics et rayons
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -81,7 +81,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode de remplissage des champs de la fenêtre avec les informations de la revue à modifier : remplit les champs de texte, le numeric up down et sélectionne les éléments correspondants dans les combobox en fonction des propriétés de la revue passée en paramètre
+        /// Remplit les champs du formulaire avec les données de la revue à modifier
         /// </summary>
         /// <param name="revue"></param>
         private void RemplirChamps(Revue revue)
@@ -97,7 +97,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode de validation de l'ajout ou de la modification d'une revue : vérifie que tous les champs obligatoires sont remplis, récupère les sélections des combobox, différencie les cas d'ajout et de modification, crée un nouvel objet revue avec les nouvelles valeurs saisies par l'utilisateur, appelle la méthode de création ou de modification du controller en fonction du cas, affiche un message de succès ou d'erreur en fonction du résultat de l'opération et ferme la fenêtre en cas de succès
+        /// Validation de l'ajout ou de la modification : vérifie les champs, crée l'objet Revue et appelle le controller
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -199,7 +199,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode d'annulation de l'ajout ou de la modification d'une revue : affiche une confirmation d'annulation, et si l'utilisateur confirme, ferme la fenêtre sans enregistrer les modifications en cours
+        /// Annule l'ajout ou la modification et ferme le formulaire
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

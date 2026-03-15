@@ -8,27 +8,27 @@ using System.Windows.Forms;
 namespace MediaTekDocuments.view
 {
     /// <summary>
-    /// Formulaire de gestion des livres : permet d'ajouter un nouveau livre ou de modifier un livre existant en fonction du constructeur utilisé (avec ou sans paramètre)
+    /// Formulaire de gestion des livres : ajout ou modification
     /// </summary>
     public partial class FrmGestionLivre : Form
     {
         /// <summary>
-        /// Instance du controller de gestion des documents pour pouvoir appeler les méthodes de création, modification et vérification d'un id de document
+        /// Controller pour gérer la création et modification de livres
         /// </summary>
         private FrmGestionDocumentsController controllerLivres;
         /// <summary>
-        /// Booléen pour savoir si le formulaire est utilisé pour la modification d'un livre ou pour l'ajout d'un nouveau livre : permet d'adapter le comportement du formulaire en fonction de l'utilisation (remplissage des champs, titre du formulaire, texte du bouton de validation)
+        /// Indique si l'opération est une modification (true) ou un ajout (false)
         /// </summary>
         private bool modifLivre = false;
         /// <summary>
-        /// Instance du livre actuel pour la modification : permet de remplir les champs du formulaire avec les informations du livre à modifier et de récupérer son id pour la modification
+        /// Livre actuel à modifier
         /// </summary>
         private Livre livreActuel = null;
 
         /// <summary>
-        /// Constructeur du formulaire de gestion des livres : si un livre est passé en paramètre, le formulaire est en mode modification et les champs sont remplis avec les informations du livre, sinon le formulaire est en mode ajout et les champs sont vides
+        /// Constructeur : initialise le formulaire en mode ajout ou modification selon le paramètre
+        /// <param name="livre">Livre à modifier ou null pour un ajout</param>
         /// </summary>
-        //=/ <param name="livre"></param>
         public FrmGestionLivre(Livre livre = null)
         {
             InitializeComponent();
@@ -52,7 +52,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode d'initialisation du formulaire : remplit les combobox avec les genres, publics et rayons disponibles en appelant les méthodes de récupération de la classe d'accès aux données, et si le formulaire est en mode ajout, les champs des combobox sont vides (index à -1)
+        /// Chargement du formulaire : remplit les combobox avec les genres, publics et rayons
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -82,9 +82,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode de remplissage des champs du formulaire avec les informations du livre à modifier : permet de pré-remplir les champs du formulaire pour faciliter la modification et éviter les erreurs de saisie
+        /// Remplit les champs du formulaire avec les informations du livre à modifier
         /// </summary>
-        /// <param name="livre"></param>
+        /// <param name="livre">Livre source</param>
         private void RemplirChamps(Livre livre)
         {
             txtLivreAjoutNumero.Text = livre.Id;
@@ -99,7 +99,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode de validation de l'ajout ou de la modification d'un livre : vérifie que tous les champs obligatoires sont remplis, récupère les sélections des combobox, et en fonction du mode (ajout ou modification), crée un nouvel objet Livre avec les informations saisies et appelle la méthode de création ou de modification du controller. Affiche un message de confirmation en cas de succès et ferme le formulaire, ou un message d'erreur en cas d'échec.
+        /// Annule l'ajout ou la modification et ferme le formulaire
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -110,7 +110,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode de validation de l'ajout ou de la modification d'un livre : vérifie que tous les champs obligatoires sont remplis, récupère les sélections des combobox, et en fonction du mode (ajout ou modification), crée un nouvel objet Livre avec les informations saisies et appelle la méthode de création ou de modification du controller. Affiche un message de confirmation en cas de succès et ferme le formulaire, ou un message d'erreur en cas d'échec.
+        /// Validation de l'ajout ou de la modification : vérifie les champs, crée l'objet Livre et appelle le controller.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

@@ -7,27 +7,27 @@ using System.Windows.Forms;
 namespace MediaTekDocuments.view
 {
     /// <summary>
-    /// Fenêtre de gestion des dvd : permet d'ajouter un nouveau dvd ou de modifier un dvd existant en fonction du constructeur utilisé (avec ou sans paramètre), contient les champs de saisie des informations d'un dvd et les boutons de validation et d'annulation, utilise le controller FrmGestionDocumentsController pour effectuer les opérations de création et de modification d'un dvd dans la base de données, utilise la classe métier Dvd pour stocker les informations du dvd en cours de modification et pour créer un nouvel objet Dvd à partir des informations saisies dans les champs
+    /// Formulaire de gestion des DVD : ajout ou modification
     /// </summary>
     public partial class FrmGestionDvd : Form
     {
         /// <summary>
-        /// Controller pour la gestion des documents : contient les méthodes de création, modification et vérification d'un id de document
+        /// Controller pour gérer la création et modification de DVD
         /// </summary>
         private FrmGestionDocumentsController controllerDvd;
         /// <summary>
-        /// Booléen pour différencier les cas d'ajout et de modification d'un dvd : true si modification, false si ajout
+        /// Indique si l'opération est une modification (true) ou un ajout (false)
         /// </summary>
         private bool modifDvd = false;
         /// <summary>
-        /// Instance de la classe métier Dvd pour stocker le dvd en cours de modification (null si ajout)
+        /// DVD actuel à modifier
         /// </summary>
         private Dvd dvdActuel = null;
 
         /// <summary>
-        /// Constructeur de la fenêtre de gestion des dvd : différencie les cas d'ajout et de modification en fonction de la présence ou non d'un dvd en paramètre, remplit les champs si modification et adapte les éléments de la fenêtre (titre, texte du bouton de validation, etc.)
+        /// Constructeur : initialise le formulaire en mode ajout ou modification selon le paramètre
         /// </summary>
-        /// <param name="dvd"></param>
+        /// <param name="dvd">DVD à modifier ou null pour un ajout</param>
         public FrmGestionDvd(Dvd dvd = null)
         {
             InitializeComponent();
@@ -51,7 +51,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode d'initialisation de la fenêtre : remplit les combobox avec les données de la base et ajoute une ligne vide pour forcer l'utilisateur à faire un choix, sauf en cas de modification où les champs sont déjà remplis et que les combobox sont positionnées sur les bonnes valeurs
+        /// Chargement du formulaire : remplit les combobox avec les genres, publics et rayons
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -82,9 +82,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode de remplissage des champs de la fenêtre à partir d'un objet Dvd : utilisée en cas de modification pour afficher les informations du dvd à modifier dans les champs correspondants
+        /// Remplit les champs du formulaire avec les informations du DVD à modifier
         /// </summary>
-        /// <param name="dvd"></param>
+        /// <param name="dvd">DVD source</param>
         private void RemplirChamps(Dvd dvd)
         {
             txtAjoutNumero.Text = dvd.Id;
@@ -99,7 +99,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode de validation de l'ajout ou de la modification d'un dvd : vérifie que tous les champs obligatoires sont remplis, récupère les sélections des combobox, crée un nouvel objet Dvd avec les informations saisies et appelle la méthode de création ou de modification du controller en fonction du cas (ajout ou modification), affiche un message de confirmation et ferme la fenêtre si l'opération est réussie
+        /// Validation de l'ajout ou de la modification : vérifie les champs, crée l'objet Dvd et appelle le controller
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -204,7 +204,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode d'annulation de l'ajout ou de la modification d'un dvd : affiche une confirmation et ferme la fenêtre si l'utilisateur confirme, sans enregistrer les modifications
+        /// Annule l'ajout ou la modification et ferme le formulaire
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

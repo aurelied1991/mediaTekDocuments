@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace MediaTekDocuments.model
 {
@@ -30,7 +31,7 @@ namespace MediaTekDocuments.model
         /// <summary>
         /// Libellé de l'état de l'exemplaire
         /// </summary>
-        public string LibelleEtat { get; set; }
+        [JsonIgnore] public string LibelleEtat { get; set; }
 
         /// <summary>
         /// Constructeur de la classe Exemplaire

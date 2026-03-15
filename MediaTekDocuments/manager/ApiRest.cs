@@ -10,7 +10,7 @@ namespace MediaTekDocuments.manager
     class ApiRest
     {
         /// <summary>
-        /// unique instance de la classe
+        /// Unique instance de la classe
         /// </summary>
         private static ApiRest instance = null;
 
@@ -27,8 +27,8 @@ namespace MediaTekDocuments.manager
         /// <summary>
         /// Constructeur privé pour préparer la connexion (éventuellement sécurisée)
         /// </summary>
-        /// <param name="uriApi">adresse de l'api</param>
-        /// <param name="authenticationString">chaîne d'authentification</param>
+        /// <param name="uriApi">Adresse de l'api</param>
+        /// <param name="authenticationString">Chaîne d'authentification</param>
         private ApiRest(String uriApi, String authenticationString = "")
         {
             httpClient = new HttpClient() { BaseAddress = new Uri(uriApi) };
@@ -43,8 +43,8 @@ namespace MediaTekDocuments.manager
         /// <summary>
         /// Crée une instance unique de la classe
         /// </summary>
-        /// <param name="uriApi">adresse de l'api</param>
-        /// <param name="authenticationString">chaîne d'authentificatio (login:pwd)</param>
+        /// <param name="uriApi">Adresse de l'api</param>
+        /// <param name="authenticationString">Chaîne d'authentificatio (login:pwd)</param>
         /// <returns></returns>
         public static ApiRest GetInstance(String uriApi, String authenticationString)
         {
@@ -58,10 +58,10 @@ namespace MediaTekDocuments.manager
         /// <summary>
         /// Envoi une demande à l'API et récupère la réponse
         /// </summary>
-        /// <param name="methode">verbe http (GET, POST, PUT, DELETE)</param>
-        /// <param name="message">message à envoyer dans l'URL</param>
-        /// <param name="parametres">contenu de variables à mettre dans body</param>
-        /// <returns>liste d'objets (select) ou liste vide (ok) ou null si erreur</returns>
+        /// <param name="methode">Verbe http (GET, POST, PUT, DELETE)</param>
+        /// <param name="message">Message à envoyer dans l'URL</param>
+        /// <param name="parametres">Contenu de variables à mettre dans body</param>
+        /// <returns>Liste d'objets (select) ou liste vide (ok) ou null si erreur</returns>
         public JObject RecupDistant(string methode, string message, String parametres)
         {
             try

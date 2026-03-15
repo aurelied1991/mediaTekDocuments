@@ -3562,7 +3562,7 @@ namespace MediaTekDocuments.view
             // 
             // btnEnregistreCommandeRevue
             // 
-            this.btnEnregistreCommandeRevue.Location = new System.Drawing.Point(932, 85);
+            this.btnEnregistreCommandeRevue.Location = new System.Drawing.Point(850, 81);
             this.btnEnregistreCommandeRevue.Name = "btnEnregistreCommandeRevue";
             this.btnEnregistreCommandeRevue.Size = new System.Drawing.Size(239, 31);
             this.btnEnregistreCommandeRevue.TabIndex = 18;
@@ -3573,14 +3573,14 @@ namespace MediaTekDocuments.view
             // dtpDateFinAbonnementRevue
             // 
             this.dtpDateFinAbonnementRevue.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpDateFinAbonnementRevue.Location = new System.Drawing.Point(740, 85);
+            this.dtpDateFinAbonnementRevue.Location = new System.Drawing.Point(640, 85);
             this.dtpDateFinAbonnementRevue.Name = "dtpDateFinAbonnementRevue";
             this.dtpDateFinAbonnementRevue.Size = new System.Drawing.Size(156, 27);
             this.dtpDateFinAbonnementRevue.TabIndex = 17;
             // 
             // txtMontantCommandeRevue
             // 
-            this.txtMontantCommandeRevue.Location = new System.Drawing.Point(738, 42);
+            this.txtMontantCommandeRevue.Location = new System.Drawing.Point(640, 42);
             this.txtMontantCommandeRevue.Name = "txtMontantCommandeRevue";
             this.txtMontantCommandeRevue.Size = new System.Drawing.Size(156, 27);
             this.txtMontantCommandeRevue.TabIndex = 16;
@@ -3589,7 +3589,7 @@ namespace MediaTekDocuments.view
             // 
             this.label106.AutoSize = true;
             this.label106.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label106.Location = new System.Drawing.Point(502, 91);
+            this.label106.Location = new System.Drawing.Point(410, 91);
             this.label106.Name = "label106";
             this.label106.Size = new System.Drawing.Size(232, 18);
             this.label106.TabIndex = 15;
@@ -3599,7 +3599,7 @@ namespace MediaTekDocuments.view
             // 
             this.label105.AutoSize = true;
             this.label105.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label105.Location = new System.Drawing.Point(502, 46);
+            this.label105.Location = new System.Drawing.Point(410, 46);
             this.label105.Name = "label105";
             this.label105.Size = new System.Drawing.Size(213, 18);
             this.label105.TabIndex = 14;
@@ -3608,14 +3608,14 @@ namespace MediaTekDocuments.view
             // dtpDateCommandeRevue
             // 
             this.dtpDateCommandeRevue.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpDateCommandeRevue.Location = new System.Drawing.Point(252, 85);
+            this.dtpDateCommandeRevue.Location = new System.Drawing.Point(222, 85);
             this.dtpDateCommandeRevue.Name = "dtpDateCommandeRevue";
             this.dtpDateCommandeRevue.Size = new System.Drawing.Size(156, 27);
             this.dtpDateCommandeRevue.TabIndex = 12;
             // 
             // txtNumeroCommandeRevue
             // 
-            this.txtNumeroCommandeRevue.Location = new System.Drawing.Point(252, 42);
+            this.txtNumeroCommandeRevue.Location = new System.Drawing.Point(222, 42);
             this.txtNumeroCommandeRevue.Name = "txtNumeroCommandeRevue";
             this.txtNumeroCommandeRevue.Size = new System.Drawing.Size(156, 27);
             this.txtNumeroCommandeRevue.TabIndex = 11;
@@ -3694,7 +3694,7 @@ namespace MediaTekDocuments.view
             // 
             this.btnDeleteCommandeRevue.Location = new System.Drawing.Point(855, 544);
             this.btnDeleteCommandeRevue.Name = "btnDeleteCommandeRevue";
-            this.btnDeleteCommandeRevue.Size = new System.Drawing.Size(270, 33);
+            this.btnDeleteCommandeRevue.Size = new System.Drawing.Size(239, 33);
             this.btnDeleteCommandeRevue.TabIndex = 58;
             this.btnDeleteCommandeRevue.Text = "Supprimer la commande";
             this.btnDeleteCommandeRevue.UseVisualStyleBackColor = true;

@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using Serilog;
 
+
 namespace MediaTekDocuments.dal
 {
     /// <summary>
@@ -18,33 +19,34 @@ namespace MediaTekDocuments.dal
     public class Access
     {
         /// <summary>
-        /// adresse de l'API
+        /// Adresse de l'API
         /// </summary>
         private static readonly string uriApi = ConfigurationManager.AppSettings["uriApi"];
         /// <summary>
-        /// instance unique de la classe
+        /// Instance unique de la classe
         /// </summary>
         private static Access instance = null;
         /// <summary>
-        /// instance de ApiRest pour envoyer des demandes vers l'api et recevoir la réponse
+        /// Instance de ApiRest pour envoyer des demandes vers l'api et recevoir la réponse
         /// </summary>
         private readonly ApiRest api = null;
         /// <summary>
-        /// méthode HTTP pour select
+        /// Méthode HTTP pour select
         /// </summary>
         private const string GET = "GET";
         /// <summary>
-        /// méthode HTTP pour insert
+        /// Méthode HTTP pour insert
         /// </summary>
         private const string POST = "POST";
         /// <summary>
-        /// méthode HTTP pour update
+        /// Méthode HTTP pour update
         /// </summary>>
         private const string PUT = "PUT";
         /// <summary>
-        /// méthode HTTP pour delete
+        /// Méthode HTTP pour delete
         /// </summary>
         private const string DELETE = "DELETE";
+ 
 
         /// <summary>
         /// Méthode privée pour créer un singleton
@@ -149,7 +151,7 @@ namespace MediaTekDocuments.dal
         }
 
         /// <summary>
-        /// Retourne toutes les livres à partir de la BDD
+        /// Retourne tous les livres à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Livre</returns>
         public List<Livre> GetAllLivres()
@@ -159,7 +161,7 @@ namespace MediaTekDocuments.dal
         }
 
         /// <summary>
-        /// Retourne toutes les dvd à partir de la BDD
+        /// Retourne tous les dvd à partir de la BDD
         /// </summary>
         /// <returns>Liste d'objets Dvd</returns>
         public List<Dvd> GetAllDvd()
@@ -284,13 +286,14 @@ namespace MediaTekDocuments.dal
         }
 
         /// <summary>
-        /// ecriture d'un exemplaire en base de données
+        /// Écriture d'un exemplaire en base de données
         /// </summary>
         /// <param name="exemplaire">exemplaire à insérer</param>
         /// <returns>true si l'insertion a pu se faire (retour != null)</returns>
         public bool CreerExemplaire(Exemplaire exemplaire)
         {
             String jsonExemplaire = JsonConvert.SerializeObject(exemplaire, new CustomDateTimeConverter());
+            Log.Information("JSON envoyé à l'API : {Json}", jsonExemplaire);
             try
             {
                 List<Exemplaire> liste = TraitementRecup<Exemplaire>(POST, "exemplaire", "champs=" + jsonExemplaire);
@@ -510,6 +513,8 @@ namespace MediaTekDocuments.dal
         /// <summary>
         /// Suppression d'une commande
         /// </summary>
+        /// <param name="idCommande"></param>
+        /// <returns></returns>
         public bool SupprimerCommande(string idCommande)
         {
             string jsonIdCommande = convertToJson("id", idCommande);

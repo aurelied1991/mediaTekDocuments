@@ -7,27 +7,27 @@ using System.Windows.Forms;
 namespace MediaTekDocuments.view
 {
     /// <summary>
-    /// Classe représentant la fenêtre d'alerte d'abonnement, qui affiche une liste des abonnements finissant dans moins de 30 jours pour les revues de la médiathèque
+    /// Fenêtre affichant les abonnements de revues se terminant dans moins de 30 jours
     /// </summary>
     public partial class FrmAlerteAbonnement : Form
     {
         /// <summary>
-        /// BindingSource pour la liste des abonnements finissant, utilisé pour lier les données à un DataGridView et faciliter l'affichage de la liste des abonnements finissant dans la fenêtre d'alerte d'abonnement
+        /// Source de données utilisée pour l'affichage des abonnements dans le DataGridView
         /// </summary>
         private readonly BindingSource bdgAbonnementsFinissantListe = new BindingSource();
         /// <summary>
-        /// Liste des abonnements finissant, qui contient les données des abonnements finissant récupérées à partir du contrôleur et utilisées pour remplir le DataGridView dans la fenêtre d'alerte d'abonnement
+        /// Liste des abonnements se terminant prochainement
         /// </summary>
         private List<AbonnementFinissant> lesAbonnementsFinissant = new List<AbonnementFinissant>();
         /// <summary>
-        /// Référence au contrôleur de FrmMediatek, qui est utilisée pour accéder aux données nécessaires à l'affichage de la liste des abonnements finissant dans la fenêtre d'alerte d'abonnement
+        /// Contrôleur permettant d'accéder aux données de l'application
         /// </summary>
-        private FrmMediatekController controller;
+        private readonly FrmMediatekController controller;
 
         /// <summary>
-        /// Constructeur de la fenêtre d'alerte d'abonnement, qui prend en paramètre le contrôleur de FrmMediatek pour pouvoir accéder aux données nécessaires à l'affichage
+        /// Initialise la fenêtre d'alerte des abonnements
         /// </summary>
-        /// <param name="controllerMediatek"></param>
+        /// <param name="controllerMediatek">Contrôleur principal de l'application</param>
         public FrmAlerteAbonnement(FrmMediatekController controllerMediatek)
         {
             InitializeComponent();
@@ -35,7 +35,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Événement de chargement de la fenêtre d'alerte d'abonnement, qui récupère la liste des abonnements finissant à partir du contrôleur et remplit le DataGridView avec ces données
+        /// Charge les abonnements se terminant prochainement lors de l'ouverture de la fenêtre
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -46,18 +46,20 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode qui remplit le DataGridView avec la liste des abonnements finissant, en utilisant un BindingSource pour faciliter la liaison des données
+        /// Remplit le DataGridView avec la liste des abonnements se terminant prochainement
         /// </summary>
-        /// <param name="abonnementsFinissant"></param>
+        /// <param name="abonnementsFinissant">Liste des abonnements à afficher</param>
         public void RemplirAbonnementsFinissantListe(List<AbonnementFinissant> abonnementsFinissant)
         {
             if (abonnementsFinissant != null && abonnementsFinissant.Count > 0)
             {
                 bdgAbonnementsFinissantListe.DataSource = abonnementsFinissant;
                 dgvListeRevuesFinAbonnement.DataSource = bdgAbonnementsFinissantListe;
-
-                dgvListeRevuesFinAbonnement.AutoSizeColumnsMode =
-                    DataGridViewAutoSizeColumnsMode.AllCells;
+                dgvListeRevuesFinAbonnement.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgvListeRevuesFinAbonnement.Columns["titreRevue"].DisplayIndex = 0;
+                dgvListeRevuesFinAbonnement.Columns["titreRevue"].HeaderText = "Nom de la revue";
+                dgvListeRevuesFinAbonnement.Columns["dateFinAbonnement"].DisplayIndex = 1;
+                dgvListeRevuesFinAbonnement.Columns["dateFinAbonnement"].HeaderText = "Date de fin d'abonnement";
             }
             else
             {
@@ -66,7 +68,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Événement de clic sur le bouton de fermeture de la fenêtre d'alerte d'abonnement, qui ferme simplement la fenêtre lorsque l'utilisateur clique dessus
+        /// Ferme la fenêtre d'alerte
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

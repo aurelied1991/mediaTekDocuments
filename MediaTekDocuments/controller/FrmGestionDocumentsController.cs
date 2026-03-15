@@ -6,17 +6,17 @@ using System.Linq;
 namespace MediaTekDocuments.controller
 {
     /// <summary>
-    /// Controller pour la gestion des documents (livres, dvd, revues) : contient les méthodes de création, modification et vérification d'un id de document
+    /// Controller pour la gestion des documents (livres, dvd, revues)
     /// </summary>
     public class FrmGestionDocumentsController
     {
         /// <summary>
-        /// Instance de la classe d'accès aux données pour pouvoir appeler les méthodes d'ajout, de modification et de récupération des documents
+        /// Instance de la classe d'accès aux données
         /// </summary>
         private readonly Access access = Access.GetInstance();
 
         /// <summary>
-        /// Méthode de création d'un livre : appelle la méthode d'ajout de document de la classe d'accès aux données en précisant le type de document et le livre à ajouter
+        /// Ajoute un livre
         /// </summary>
         /// <param name="livre"></param>
         /// <returns></returns>
@@ -26,7 +26,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de création d'un dvd : appelle la méthode d'ajout de document de la classe d'accès aux données en précisant le type de document et le dvd à ajouter
+        ///Ajoute un dvd
         /// </summary>
         /// <param name="dvd"></param>
         /// <returns></returns>
@@ -36,7 +36,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de création d'une revue : appelle la méthode d'ajout de document de la classe d'accès aux données en précisant le type de document et la revue à ajouter
+        /// Ajoute une revue
         /// </summary>
         /// <param name="revue"></param>
         /// <returns></returns>
@@ -46,7 +46,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de modification d'un livre : appelle la méthode de modification de document de la classe d'accès aux données en précisant le type de document, le livre à modifier et son id
+        /// Modifie un livre existant
         /// </summary>
         /// <param name="livre"></param>
         /// <returns></returns>
@@ -56,7 +56,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de modification d'un dvd : appelle la méthode de modification de document de la classe d'accès aux données en précisant le type de document, le dvd à modifier et son id
+        /// Modifie un dvd existant
         /// </summary>
         /// <param name="dvd"></param>
         /// <returns></returns>
@@ -66,7 +66,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de modification d'une revue : appelle la méthode de modification de document de la classe d'accès aux données en précisant le type de document, la revue à modifier et son id
+        /// Modifie une revue existante
         /// </summary>
         /// <param name="revue"></param>
         /// <returns></returns>
@@ -76,7 +76,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de vérification de la disponibilité d'un id de document : vérifie que l'id n'existe pas déjà dans les livres, les dvd et les revues en récupérant tous les documents et en cherchant une correspondance d'id
+        /// Vérifie la disponibilité d'un id de document
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -91,7 +91,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de récupération de tous les livres : appelle la méthode de récupération de tous les documents de la classe d'accès aux données en précisant le type de document et retourne la liste des livres récupérés
+        /// Récupère tous les livres
         /// </summary>
         /// <returns></returns>
         public List<Livre> GetAllLivres()
@@ -100,7 +100,7 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de récupération de tous les dvd : appelle la méthode de récupération de tous les documents de la classe d'accès aux données en précisant le type de document et retourne la liste des dvd récupérés
+        /// Récupère tous les dvd
         /// </summary>
         /// <returns></returns>
         public List<Dvd> GetAllDvd()
@@ -109,9 +109,9 @@ namespace MediaTekDocuments.controller
         }
 
         /// <summary>
-        /// Méthode de récupération de toutes les revues : appelle la méthode de récupération de tous les documents de la classe d'accès aux données en précisant le type de document et retourne la liste des revues récupérées
-        /// </summary>
+        /// Récupère toutes les revues
         /// <returns></returns>
+        /// </summary>
         public List<Revue> GetAllRevues()
         {
             return access.GetAllRevues();

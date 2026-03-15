@@ -10,42 +10,42 @@ using System.Windows.Forms;
 namespace MediaTekDocuments.view
 
 {
+
     /// <summary>
-    /// Classe d'affichage
+    /// Fenêtre principale de l'application Mediatek qui permet la gestion des documents, commandes et abonnements
     /// </summary>
     public partial class FrmMediatek : Form
     {
         #region Commun
         /// <summary>
-        /// Document sélectionné dans le datagridview des livres ou des dvd, utilisé pour afficher les informations détaillées du document sélectionné dans les zones d'affichage prévues à cet effet, ainsi que pour récupérer les commandes associées à ce document et les afficher dans les listes dédiées aux commandes. Cette variable est mise à jour à chaque fois qu'un livre ou un dvd est sélectionné dans le datagridview, en récupérant les informations du document via l'API ou la base de données, et permet d'afficher les détails du document de manière claire et organisée pour l'utilisateur
+        /// Contrôleur permettant d'accéder aux données de l'application
         /// </summary>
         private readonly FrmMediatekController controller;
         /// <summary>
-        /// Bindingsource et listes utilisées pour la gestion de l'affichage des genres, publics et rayons dans les combobox de l'onglet Livres et Dvd, en permettant de remplir les combobox avec les données récupérées depuis l'API ou la base de données, et d'afficher les libellés correspondants aux genres, publics et rayons dans les combobox pour faciliter la sélection et le filtrage des livres et dvd en fonction de ces catégories. Ces variables sont utilisées pour gérer l'affichage des catégories dans les combobox et pour permettre à l'utilisateur de sélectionner une catégorie spécifique pour filtrer les livres ou dvd affichés dans le datagridview
+        /// Source de données pour les genres
         /// </summary>
         private readonly BindingSource bdgGenres = new BindingSource();
         /// <summary>
-        /// Bindingsource et listes utilisées pour la gestion de l'affichage des genres, publics et rayons dans les combobox de l'onglet Livres et Dvd, en permettant de remplir les combobox avec les données récupérées depuis l'API ou la base de données, et d'afficher les libellés correspondants aux genres, publics et rayons dans les combobox pour faciliter la sélection et le filtrage des livres et dvd en fonction de ces catégories. Ces variables sont utilisées pour gérer l'affichage des catégories dans les combobox et pour permettre à l'utilisateur de sélectionner une catégorie spécifique pour filtrer les livres ou dvd affichés dans le datagridview
+        /// Source de données pour les publics
         /// </summary>
         private readonly BindingSource bdgPublics = new BindingSource();
         /// <summary>
-        /// Bindingsource et listes utilisées pour la gestion de l'affichage des genres, publics et rayons dans les combobox de l'onglet Livres et Dvd, en permettant de remplir les combobox avec les données récupérées depuis l'API ou la base de données, et d'afficher les libellés correspondants aux genres, publics et rayons dans les combobox pour faciliter la sélection et le filtrage des livres et dvd en fonction de ces catégories. Ces variables sont utilisées pour gérer l'affichage des catégories dans les combobox et pour permettre à l'utilisateur de sélectionner une catégorie spécifique pour filtrer les livres ou dvd affichés dans le datagridview
+        /// Source de données pour les rayons
         /// </summary>
         private readonly BindingSource bdgRayons = new BindingSource();
         /// <summary>
-        /// Constantes utilisées pour représenter les différents états d'une commande (en cours, livrée, réglée, relancée), qui sont utilisées pour afficher l'état d'une commande de manière lisible pour l'utilisateur dans les listes dédiées aux commandes, et pour permettre de différencier les commandes en fonction de leur état. Ces constantes sont utilisées pour gérer l'affichage des états des commandes et pour permettre à l'utilisateur de comprendre rapidement l'état d'une commande lorsqu'il consulte les listes de commandes associées à un livre ou un dvd sélectionné
+        /// Constantes représentant les états possibles d'une commande
         /// </summary>
         private const string EN_COURS = "0001";
         private const string LIVREE = "0002";
         private const string REGLEE = "0003";
         private const string RELANCEE = "0004";
-        public const string LIBELLE_EN_COURS = "en cours";
         /// <summary>
-        /// Variable de contrôle utilisée pour éviter le déclenchement d'événements lors du chargement des combobox, en permettant de différencier les événements déclenchés par l'utilisateur lors de la sélection d'une catégorie dans les combobox des événements déclenchés automatiquement lors du chargement des données dans les combobox. Cette variable est utilisée pour éviter les comportements indésirables lors du chargement des données dans les combobox, en empêchant le déclenchement d'événements qui pourraient interférer avec le processus de chargement et d'affichage des données dans les combobox
+        /// Indique si les combobox sont en cours de chargement
         /// </summary>
         private bool chargementCombo = false;
         /// <summary>
-        /// Utilisateur connecté à l'application, qui est utilisé pour gérer les droits d'accès et les fonctionnalités disponibles dans l'application en fonction du service auquel l'utilisateur appartient. Cette variable est initialisée lors de la création du formulaire avec le constructeur qui prend en paramètre un objet Utilisateur, et permet de déterminer les droits d'accès de l'utilisateur et d'afficher ou de masquer certaines fonctionnalités de l'application en fonction de son service (administrateur, administratif, lecteur, etc.) pour garantir une utilisation sécurisée et adaptée aux différents profils d'utilisateurs de la médiathèque
+        /// Utilisateur actuellement connecté
         /// </summary>
         private Utilisateur utilisateurConnecte;
 
@@ -82,7 +82,10 @@ namespace MediaTekDocuments.view
             controller = new FrmMediatekController();
         }
 
-        // Nouveau constructeur avec l'utilisateur connecté
+        /// <summary>
+        /// Nouveau constructeur avec l'utilisateur connecté
+        /// </summary>
+        /// <param name="utilisateur"></param>
         public FrmMediatek(Utilisateur utilisateur) : this()  // appelle le constructeur par défaut
         {
             utilisateurConnecte = utilisateur;
@@ -96,7 +99,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Gère les droits d'accès en fonction du service de l'utilisateur connecté. Si l'utilisateur appartient au service 3 (Lecteur), certaines fonctionnalités sont désactivées pour restreindre l'accès à des actions spécifiques
+        /// Gère les droits d'accès en fonction du service de l'utilisateur connecté. 
         /// </summary>
         private void GererDroits()
         {
@@ -126,7 +129,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Rempli un des 3 combo (genre, public, rayon)
+        /// Remplit une ComboBox avec une liste de catégories.
         /// </summary>
         /// <param name="lesCategories">liste des objets de type Genre ou Public ou Rayon</param>
         /// <param name="bdg">bindingsource contenant les informations</param>
@@ -200,25 +203,24 @@ namespace MediaTekDocuments.view
 
         #region Onglet Livres
         /// <summary>
-        /// Bindingsource et liste de livres pour l'affichage dans le datagrid et la gestion des recherches et filtres
+        /// Source de données pour l'affichage de la liste des livres
         /// </summary>
         private readonly BindingSource bdgLivresListe = new BindingSource();
         /// <summary>
-        /// Liste de livres récupérée à partir de l'API et utilisée pour remplir le datagrid des livres, ainsi que pour effectuer les recherches et les filtres sur les livres. Cette liste contient tous les livres disponibles et est mise à jour à chaque chargement de l'onglet Livres ou après une opération d'ajout, de modification ou de suppression d'un livre
+        /// Liste des livres récupérés depuis l'API
         /// </summary>
         private List<Livre> lesLivres = new List<Livre>();
         /// <summary>
-        /// Bindingsource et liste d'exemplaires d'un livre sélectionné, utilisés pour l'affichage des exemplaires dans le datagrid dédié aux exemplaires d'un livre. Cette liste est mise à jour à chaque sélection d'un livre dans le datagrid des livres, en récupérant les exemplaires associés à ce livre via l'API ou la base de données, et permet d'afficher les informations des exemplaires (numéro, date d'achat, état) de manière lisible pour l'utilisateur dans le datagrid des exemplaires du livre sélectionné
+        /// Source de données pour les exemplaires d'un livre
         /// </summary>
         private readonly BindingSource bdgExemplairesLivre = new BindingSource();
         /// <summary>
-        /// Liste d'exemplaires d'un livre sélectionné, qui contient les données des exemplaires associées au livre actuellement sélectionné dans le datagrid des livres. Cette liste est utilisée pour remplir le datagrid des exemplaires du livre sélectionné, en affichant les informations pertinentes telles que le numéro de l'exemplaire, la date d'achat et l'état de l'exemplaire. La liste est mise à jour à chaque fois qu'un livre est sélectionné dans le datagrid des livres, en récupérant les exemplaires correspondants à ce livre via l'API ou la base de données, et permet d'afficher les détails des exemplaires de manière claire et organisée pour l'utilisateur
+        /// Liste des exemplaires du livre sélectionné
         /// </summary>
         private List<Exemplaire> lesExemplairesLivre = new List<Exemplaire>();
 
         /// <summary>
-        /// Ouverture de l'onglet Livres : 
-        /// appel des méthodes pour remplir le datagrid des livres et des combos (genre, rayon, public)
+        /// Ouverture de l'onglet Livres : appel des méthodes pour remplir le datagrid des livres et des combos (genre, rayon, public)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -232,7 +234,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le dategrid avec la liste de livres reçue en paramètre
         /// </summary>
         /// <param name="livres">liste de livres</param>
         private void RemplirLivresListe(List<Livre> livres)
@@ -287,7 +289,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage des livres dont le titre matche acec la saisie.
+        /// Recherche et affichage des livres dont le titre matche avec la saisie.
         /// Cette procédure est exécutée à chaque ajout ou suppression de caractère
         /// dans le textBox de saisie.
         /// </summary>
@@ -417,8 +419,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur la sélection d'une ligne ou cellule dans le grid
-        /// affichage des informations du livre
+        /// Sur la sélection d'une ligne ou cellule dans le grid, affichage des informations du livre
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -486,7 +487,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// vide les zones de recherche et de filtre
+        /// Vide les zones de recherche et de filtre
         /// </summary>
         private void VideLivresZones()
         {
@@ -544,7 +545,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire d'ajout d'un livre
+        /// Évenement clic qui permet d'ouvrir le formulaire d'ajout d'un livre
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -563,7 +564,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'un livre
+        /// Évenement clic qui permet d'ouvrir le formulaire de modification d'un livre
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -586,7 +587,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de supprimer un livre après confirmation de l'utilisateur
+        /// Évenement clic qui permet de supprimer un livre après confirmation de l'utilisateur
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -622,7 +623,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Méthode qui remplit le DataGridView des exemplaires d'un livre, en masquant les colonnes inutiles et en formatant les autres de manière lisible pour l'utilisateur
+        /// Méthode qui récupère et affiche les exemplaires du livre sélectionné
         /// </summary>
         /// <param name="exemplaires"></param>
         private void RemplirExemplairesLivre(List<Exemplaire> exemplaires)
@@ -662,9 +663,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affiche les exemplaires du livre sélectionné dans le DataGridView dédié aux exemplaires, en appelant la méthode de remplissage spécifique pour les livres
+        /// Récupère et affiche les exemplaires du livre sélectionné
         /// </summary>
-        /// <param name="idDocument"></param>
+        /// <param name="idDocument">Identifiant du document</param>
         private void AfficheExemplairesLivre(string idDocument)
         {
             // Récupère les exemplaires du livre via l'API / BDD
@@ -674,7 +675,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur les colonnes du DataGridView des exemplaires d'un livre
+        /// Trie la liste des exemplaires selon la colonne sélectionnée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -702,10 +703,10 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'un exemplaire de livre, en préremplissant les champs avec les informations de l'exemplaire sélectionné et en proposant la liste des états disponibles pour la modification
+        /// Ouvre le formulaire de modification de l'état d'un exemplaire sélectionné
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Objet déclencheur de l'événement</param>
+        /// <param name="e">Données de l'événement</param>
         private void btnModiferExemplaireLivre_Click(object sender, EventArgs e)
         {
             if (dgvExemplairesLivre.CurrentRow == null)
@@ -734,10 +735,10 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui valide la modification de l'état d'un exemplaire de livre, en envoyant les informations nécessaires à l'API pour la mise à jour, puis en rafraîchissant la liste des exemplaires affichée et en désactivant le GroupBox de modification
+        /// Valide la modification de l'état d'un exemplaire de livre
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Objet déclencheur de l'événement</param>
+        /// <param name="e">Données de l'événement</param>
         private void btnValiderEtatLivre_Click(object sender, EventArgs e)
         {
             string idDocument = txbLivresNumero.Text;
@@ -763,10 +764,10 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui annule la modification de l'état d'un exemplaire de livre, en désactivant le GroupBox de modification et en vidant les champs de saisie
+        /// Annule la modification de l'état d'un exemplaire et réinitialise les champs
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Objet déclencheur de l'événement</param>
+        /// <param name="e">Données de l'événement</param>
         private void btnAnnulerModifEtatLivre_Click(object sender, EventArgs e)
         {
             grpModifExemplaireLivre.Enabled = false;
@@ -776,10 +777,10 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de supprimer un exemplaire de livre après confirmation de l'utilisateur, en envoyant les informations nécessaires à l'API pour la suppression, puis en rafraîchissant la liste des exemplaires affichée
+        /// Supprime l'exemplaire sélectionné après confirmation de l'utilisateur
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Objet déclencheur de l'événement</param>
+        /// <param name="e">Données de l'événement</param>
         private void btnSupprimerExemplaireLivre_Click(object sender, EventArgs e)
         {
             var exemplaire = dgvExemplairesLivre.CurrentRow?.DataBoundItem as Exemplaire;
@@ -819,22 +820,21 @@ namespace MediaTekDocuments.view
 
         #region Onglet Dvd
         /// <summary>
-        /// Bindingsource et listes utilisées pour la gestion de l'affichage des dvd et de leurs exemplaires dans les datagridviews de l'onglet Dvd
+        /// Source de données utilisée pour l'affichage de la liste des DVD
         /// </summary>
         private readonly BindingSource bdgDvdListe = new BindingSource();
         /// <summary>
-        /// Liste des dvd récupérée depuis l'API, utilisée pour l'affichage et la recherche dans le datagridview des dvd
+        /// Liste des DVD récupérés depuis l'API
         /// </summary>
         private List<Dvd> lesDvd = new List<Dvd>();
         /// <summary>
-        /// Bindingsource et liste utilisées pour la gestion de l'affichage des exemplaires de dvd dans le datagridview dédié aux exemplaires de dvd, en fonction du dvd sélectionné
+        /// Liste des exemplaires du DVD sélectionné
         /// </summary>
         private List<Exemplaire> lesExemplairesDvd = new List<Exemplaire>();
 
 
         /// <summary>
-        /// Ouverture de l'onglet Dvds : 
-        /// appel des méthodes pour remplir le datagrid des dvd et des combos (genre, rayon, public)
+        /// Ouverture de l'onglet Dvds : remplissage des DataGridView et ComboBox (genres, rayons, publics)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -848,9 +848,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le DataGridView avec la liste de DVD passée en paramètre
         /// </summary>
-        /// <param name="Dvds">liste de dvd</param>
+        /// <param name="Dvds">liste de DVD à afficher</param>
         private void RemplirDvdListe(List<Dvd> Dvds)
         {
             bdgDvdListe.DataSource = Dvds;
@@ -866,8 +866,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage du Dvd dont on a saisi le numéro.
-        /// Si non trouvé, affichage d'un MessageBox.
+        /// Recherche et affiche le DVD correspondant au numéro saisi.
+        /// Active les options d'exemplaires si l'utilisateur a les droits.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -903,9 +903,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage des Dvd dont le titre matche acec la saisie.
-        /// Cette procédure est exécutée à chaque ajout ou suppression de caractère
-        /// dans le textBox de saisie.
+        /// Recherche et affiche les DVD dont le titre contient la saisie.
+        /// Se déclenche à chaque modification du TextBox de recherche.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -933,9 +932,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations du dvd sélectionné
+        /// Affiche les informations détaillées du DVD sélectionné dans les zones correspondantes
         /// </summary>
-        /// <param name="dvd">le dvd</param>
+        /// <param name="dvd">DVD à afficher</param>
         private void AfficheDvdInfos(Dvd dvd)
         {
             txbDvdRealisateur.Text = dvd.Realisateur;
@@ -976,7 +975,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Filtre sur le genre
+        ///  Filtre la liste des DVD selon le genre sélectionné
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -995,7 +994,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Filtre sur la catégorie de public
+        /// Filtre la liste des DVD selon le public sélectionné
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1014,7 +1013,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Filtre sur le rayon
+        /// Filtre la liste des DVD selon le rayon sélectionné
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1062,7 +1061,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des Dvd
+        /// Annule le filtre sur le public et réaffiche tous les DVD
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1072,7 +1071,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des Dvd
+        /// Annule le filtre sur le rayon et réaffiche tous les DVD
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1082,7 +1081,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des Dvd
+        /// Annule le filtre sur le genre et réaffiche tous les DVD
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1092,8 +1091,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage de la liste complète des Dvd
-        /// et annulation de toutes les recherches et filtres
+        /// Affiche la liste complète des DVD et annule tous les filtres et recherches
         /// </summary>
         private void RemplirDvdListeComplete()
         {
@@ -1102,7 +1100,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// vide les zones de recherche et de filtre
+        /// Vide toutes les zones de recherche et filtres
         /// </summary>
         private void VideDvdZones()
         {
@@ -1114,7 +1112,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur les colonnes
+        /// Tri la liste des DVD selon la colonne cliquée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1151,7 +1149,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Récupère la liste des Dvd depuis l'API et affiche la liste complète dans le datagrid
+        /// Charge la liste complète des DVD depuis l'API et affiche tous les éléments
         /// </summary>
         private void ChargerListeDvd()
         {
@@ -1160,7 +1158,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire d'ajout d'un dvd
+        ///  Ouvre le formulaire d'ajout d'un DVD et recharge la liste si ajout réussi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1179,7 +1177,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'un dvd
+        /// Ouvre le formulaire de modification pour le DVD sélectionné et recharge la liste après modification
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1205,7 +1203,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de supprimer un dvd après confirmation de l'utilisateur
+        /// Supprime le DVD sélectionné après confirmation et recharge la liste
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1241,9 +1239,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affiche la liste des exemplaires du dvd sélectionné
+        /// Affiche les exemplaires du DVD sélectionné dans le DataGridView dédié
         /// </summary>
-        /// <param name="idDocument"></param>
+        /// <param name="idDocument">Identifiant du DVD</param>
         private void AfficheExemplairesDvd(string idDocument)
         {
             // Récupère les exemplaires via l'API / BDD
@@ -1253,8 +1251,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le DataGridView des exemplaires DVD
+        /// Remplit le DataGridView des exemplaires DVD avec la liste fournie
         /// </summary>
+        /// <param name="exemplaires">Liste des exemplaires à afficher</param>
         private void RemplirExemplairesDvd(List<Exemplaire> exemplaires)
         {
             if (exemplaires != null)
@@ -1308,7 +1307,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur les colonnes du DataGridView des exemplaires DVD
+        /// Tri les exemplaires DVD selon la colonne cliquée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1333,7 +1332,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'un exemplaire de dvd
+        /// Ouvre le formulaire de modification pour l'état de l'exemplaire DVD sélectionné
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1365,7 +1364,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de valider la modification de l'état d'un exemplaire de dvd
+        /// Valide la modification de l'état d'un exemplaire DVD et rafraîchit l'affichage
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1394,7 +1393,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'annuler la modification de l'état d'un exemplaire de dvd
+        /// Annule la modification de l'état d'un exemplaire DVD et restaure l'affichage initial
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1407,7 +1406,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de supprimer un exemplaire de dvd après confirmation de l'utilisateur
+        /// Supprime un exemplaire DVD après confirmation et rafraîchit la liste
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1449,12 +1448,19 @@ namespace MediaTekDocuments.view
         #endregion
 
         #region Onglet Revues
+        /// <summary>
+        /// BindingSource pour gérer le binding de la DataGridView des revues.
+        /// Permet de lier facilement la liste de revues aux colonnes du grid.
+        /// </summary>
         private readonly BindingSource bdgRevuesListe = new BindingSource();
+        /// <summary>
+        /// Liste complète des revues récupérées depuis l'API
+        /// </summary>
         private List<Revue> lesRevues = new List<Revue>();
 
         /// <summary>
-        /// Ouverture de l'onglet Revues : 
-        /// appel des méthodes pour remplir le datagrid des revues et des combos (genre, rayon, public)
+        /// Ouverture de l'onglet Revues : récupère les données depuis l'API,
+        /// remplit les combos (genre, rayon, public) et affiche la liste complète.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1468,9 +1474,10 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste reçue en paramètre
+        /// Remplit le DataGridView avec la liste fournie.
+        /// Masque certaines colonnes techniques (id, image) et ajuste la largeur des colonnes.
         /// </summary>
-        /// <param name="revues"></param>
+        /// <param name="revues">Liste des revues</param>
         private void RemplirRevuesListe(List<Revue> revues)
         {
             bdgRevuesListe.DataSource = revues;
@@ -1485,8 +1492,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage de la revue dont on a saisi le numéro.
-        /// Si non trouvé, affichage d'un MessageBox.
+        /// Recherche d'une revue par numéro et affichage dans le datagrid.
+        /// Si non trouvée, message d'erreur et affichage de la liste complète.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1517,8 +1524,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage des revues dont le titre matche acec la saisie.
-        /// Cette procédure est exécutée à chaque ajout ou suppression de caractère
+        /// Recherche dynamique par titre : filtrage au fur et à mesure de la saisie.
+        /// Si le textBox est vide et aucun filtre actif, affiche la liste complète.
         /// dans le textBox de saisie.
         /// </summary>
         /// <param name="sender"></param>
@@ -1547,9 +1554,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations de la revue sélectionné
+        /// Affiche les informations détaillées de la revue sélectionnée
         /// </summary>
-        /// <param name="revue">la revue</param>
+        /// <param name="revue">La revue</param>
         private void AfficheRevuesInfos(Revue revue)
         {
             txbRevuesPeriodicite.Text = revue.Periodicite;
@@ -1572,7 +1579,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Vide les zones d'affichage des informations de la reuve
+        /// Vide toutes les zones d'affichage des informations d'une revue
         /// </summary>
         private void VideRevuesInfos()
         {
@@ -1588,7 +1595,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Filtre sur le genre
+        /// Filtre sur le genre et affiche uniquement les revues correspondantes.
+        /// Réinitialise les autres filtres et recherches.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1607,7 +1615,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Filtre sur la catégorie de public
+        /// Filtre sur le public et affiche uniquement les revues correspondantes.
+        /// Réinitialise les autres filtres et recherches.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1626,7 +1635,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Filtre sur le rayon
+        /// Filtre sur le rayon et affiche uniquement les revues correspondantes.
+        /// Réinitialise les autres filtres et recherches.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1645,8 +1655,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur la sélection d'une ligne ou cellule dans le grid
-        /// affichage des informations de la revue
+        /// Sur la sélection d'une ligne ou cellule dans le DataGridView, affiche les infos de la revue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1671,7 +1680,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des revues
+        /// Annule le filtre sur le public et réaffiche la liste complète
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1681,7 +1690,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des revues
+        /// Annule le filtre sur le rayon et réaffiche la liste complète
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1691,7 +1700,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Sur le clic du bouton d'annulation, affichage de la liste complète des revues
+        /// Annule le filtre sur le genre et réaffiche la liste complète
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1701,8 +1710,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage de la liste complète des revues
-        /// et annulation de toutes les recherches et filtres
+        /// Réaffiche la liste complète et annule toutes les recherches et filtres
         /// </summary>
         private void RemplirRevuesListeComplete()
         {
@@ -1711,7 +1719,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// vide les zones de recherche et de filtre
+        /// Vide toutes les zones de recherche et de filtre
         /// </summary>
         private void VideRevuesZones()
         {
@@ -1723,7 +1731,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur les colonnes
+        /// Tri la liste des revues selon la colonne cliquée.
+        /// Réinitialise les zones de recherche/filtres avant tri.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1760,7 +1769,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Récupère la liste des revues depuis l'API et affiche la liste complète dans le datagrid
+        /// Charge la liste complète des revues depuis l'API et l'affiche
         /// </summary>
         private void ChargerListeRevues()
         {
@@ -1769,7 +1778,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire d'ajout d'une revue
+        /// Événement clic qui permet d'ouvrir le formulaire d'ajout d'une revue.
+        /// Après validation, recharge la liste depuis l'API et rafraîchit le DataGridView.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1789,7 +1799,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le formulaire de modification d'une revue
+        /// Événement clic qui permet d'ouvrir le formulaire d'ajout d'une revue.
+        /// Après validation, recharge la liste depuis l'API et rafraîchit le DataGridView.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1815,7 +1826,8 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de supprimer une revue après confirmation de l'utilisateur
+        /// Événement clic qui permet de supprimer une revue après confirmation de l'utilisateur.
+        /// Recharge le DataGridView si la suppression réussit.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1853,24 +1865,28 @@ namespace MediaTekDocuments.view
 
         #region Onglet Parutions
         /// <summary>
-        /// BindingSource pour la gestion de la liste des exemplaires d'une revue dans le datagrid.
+        /// BindingSource pour gérer l'affichage de la liste des exemplaires d'une revue dans le DataGridView
         /// </summary>
         private readonly BindingSource bdgExemplairesListe = new BindingSource();
         /// <summary>
-        /// Liste des exemplaires d'une revue sélectionnée dans le datagrid des revues.
+        /// Liste des exemplaires correspondant à la revue sélectionnée dans le DataGridView des revues
         /// </summary>
         private List<Exemplaire> lesExemplaires = new List<Exemplaire>();
         /// <summary>
-        /// Liste des revues récupérée depuis l'API pour les recherches et affichages dans le datagrid.
+        /// Liste des revues récupérée depuis l'API, utilisée pour les recherches et l'affichage des états dans le datagrid.
         /// </summary>
         private List<Etat> lesEtats = new List<Etat>();
         /// <summary>
-        /// Constante de l'état "neuf" pour la création d'un nouvel exemplaire d'une revue.
+        /// Constante représentant l'état "Neuf" lors de la création d'un nouvel exemplaire.
         /// </summary>
-        const string ETATNEUF = "00001";
+        private const string ETATNEUF = "00001";
+        /// <summary>
+        /// Constante représentant le libellé de l'état "neuf"
+        /// </summary>
+        private const string LIBELLE_ETAT = "neuf";
 
         /// <summary>
-        /// Ouverture de l'onglet : récupère le revues et vide tous les champs.
+        /// Ouverture de l'onglet : Récupère les revues et états, et réinitialise le champ de saisie
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1882,9 +1898,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le dategrid des exemplaires avec la liste reçue en paramètre
+        /// Remplit le DataGridView avec la liste d'exemplaires passée en paramètre
         /// </summary>
-        /// <param name="exemplaires">liste d'exemplaires</param>
+        /// <param name="exemplaires">liste d'exemplaires à afficher</param>
         private void RemplirReceptionExemplairesListe(List<Exemplaire> exemplaires)
         {
             if (exemplaires != null)
@@ -1935,8 +1951,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Si le numéro de revue est modifié, la zone de l'exemplaire est vidée et inactive
-        /// les informations de la revue son aussi effacées
+        /// Si le numéro de revue est modifié, réinitialise les champs et désactive la zone des exemplaires
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -1955,9 +1970,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations de la revue sélectionnée et les exemplaires
+        /// Affiche les informations d'une revue sélectionnée et ses exemplaires
         /// </summary>
-        /// <param name="revue">la revue</param>
+        /// <param name="revue">La revue à afficher</param>
         private void AfficheReceptionRevueInfos(Revue revue)
         {
             // informations sur la revue
@@ -1983,7 +1998,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Récupère et affiche les exemplaires d'une revue
+        /// Récupère et affiche les exemplaires de la revue
         /// </summary>
         private void AfficheReceptionExemplairesRevue()
         {
@@ -1994,10 +2009,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Permet ou interdit l'accès à la gestion de la réception d'un exemplaire
-        /// et vide les objets graphiques
+        /// Active ou désactive l'accès au groupBox exemplaire et réinitialise les champs
         /// </summary>
-        /// <param name="acces">true ou false</param>
+        /// <param name="acces">True pour activer, false pour désactiver</param>
         private void AccesReceptionExemplaireGroupBox(bool acces)
         {
             grpReceptionExemplaire.Enabled = acces;
@@ -2037,7 +2051,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Enregistrement du nouvel exemplaire
+        /// Enregistre un nouvel exemplaire dans la base
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2052,7 +2066,7 @@ namespace MediaTekDocuments.view
                     string photo = txbReceptionExemplaireImage.Text;
                     string idEtat = ETATNEUF;
                     string idDocument = txbReceptionRevueNumero.Text;
-                    string libelleEtat = lesEtats.Find(etat => etat.Id == idEtat)?.Libelle ?? "Inconnu";
+                    string libelleEtat = LIBELLE_ETAT;
                     Exemplaire exemplaire = new Exemplaire(numero, dateAchat, photo, idEtat, idDocument, libelleEtat);
                     if (controller.CreerExemplaire(exemplaire))
                     {
@@ -2077,7 +2091,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur une colonne
+        /// Tri les exemplaires en fonction de la colonne cliquée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2093,15 +2107,15 @@ namespace MediaTekDocuments.view
                 case "DateAchat":
                     sortedList = lesExemplaires.OrderBy(o => o.DateAchat).Reverse().ToList();
                     break;
-                case COL_PHOTO:
-                    sortedList = lesExemplaires.OrderBy(o => o.Photo).ToList();
+                case "LibelleEtat":
+                    sortedList = lesExemplaires.OrderBy(o => o.LibelleEtat).ToList();
                     break;
             }
             RemplirReceptionExemplairesListe(sortedList);
         }
 
         /// <summary>
-        /// affichage de l'image de l'exemplaire suite à la sélection d'un exemplaire dans la liste
+        /// Affiche l'image de l'exemplaire sélectionné
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2130,7 +2144,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'ouvrir le groupBox de modification de l'état d'un exemplaire d'une revue
+        /// Ouvre le groupBox pour modifier l'état d'un exemplaire
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2160,7 +2174,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de valider la modification de l'état d'un exemplaire d'une revue
+        /// Valide la modification de l'état d'un exemplaire
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2188,7 +2202,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet d'annuler la modification de l'état d'un exemplaire  d'une revue
+        /// Annule la modification de l'état d'un exemplaire
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2200,7 +2214,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Evenement clic qui permet de supprimer un exemplaire d'une revue après confirmation de l'utilisateur
+        /// Supprime un exemplaire après confirmation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2242,7 +2256,7 @@ namespace MediaTekDocuments.view
 
         #region Onglet Commandes de livres
         /// <summary>
-        /// BindingSource pour le datagrid des commandes de livres
+        /// BindingSource pour le DataGridView des commandes
         /// </summary>
         private readonly BindingSource bdgCommandesListe = new BindingSource();
         /// <summary>
@@ -2250,12 +2264,12 @@ namespace MediaTekDocuments.view
         /// </summary>
         private List<CommandeDocument> lesCommandes = new List<CommandeDocument>();
         /// <summary>
-        /// Document sélectionné dans le datagrid des commandes de livres, utilisé pour afficher les informations du livre et du document
+        /// D Document sélectionné dans le DataGridView
         /// </summary>
         private Document documentSelectionne;
 
         /// <summary>
-        /// Ouverture de l'onglet
+        /// Initialisation de l'onglet Commandes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2265,9 +2279,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations du document sélectionné
+        /// Affiche les informations d'un document sélectionné
         /// </summary>
-        /// <param name="documentSelectionne"></param>
+        /// <param name="documentSelectionne">Document à afficher</param>
         private void RemplirInfosDocument(Document documentSelectionne)
         {
             if (documentSelectionne == null) return;
@@ -2276,9 +2290,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations du livre sélectionné
+        /// Affichage des informations d'un livre sélectionné
         /// </summary>
-        /// <param name="livre"></param>
+        /// <param name="livre">Livre à afficher</param>
         private void RemplirInfosLivre(Livre livre)
         {
             if (livre == null) return;
@@ -2291,7 +2305,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Vide les zones d'affichage des informations du document et du livre
+        /// Vide les champs d'affichage du document et du livre
         /// </summary>
         private void ViderChamps()
         {
@@ -2306,9 +2320,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste de commandes reçue en paramètre
+        /// Remplit le DataGridView avec la liste de commandes passée en paramètre
         /// </summary>
-        /// <param name="commandes"></param>
+        /// <param name="commandes">Liste des commandes</param>
         private void RemplirCommandesListe(List<CommandeDocument> commandes)
         {
             if (commandes != null)
@@ -2348,7 +2362,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur les colonnes du datagrid des commandes
+        /// Tri des commandes selon la colonne cliquée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2387,7 +2401,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage du livre dont on a saisi le numéro.
+        /// Recherche et affichage du livre correspondant au numéro saisi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2397,7 +2411,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Enregistrement d'une nouvelle commande pour le livre sélectionné.
+        /// Enregistrement d'une nouvelle commande pour le livre sélectionné
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2447,7 +2461,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage du suivi de la commande sélectionnée et possibilité de le modifier.
+        /// Affiche le suivi de la commande et permet sa modification
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2472,7 +2486,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Enregistrement du changement de suivi de la commande sélectionnée.
+        /// Enregistre la modification du suivi de la commande sélectionnée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2503,7 +2517,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Validation du changement de suivi : vérification de la cohérence des étapes (ex : une commande réglée ne peut pas être remise en cours, etc.)
+        /// Vérifie la cohérence lors du changement d'étape d'une commande
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2556,7 +2570,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Annulation du changement de suivi : réinitialisation de la combo et désactivation du groupe de modification
+        /// Annule la modification du suivi et réinitialise les champs
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2568,7 +2582,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Suppression de la commande sélectionnée après confirmation de l'utilisateur et rafraîchissement de la liste des commandes
+        /// Supprime la commande sélectionnée après confirmation et met à jour la liste
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2613,16 +2627,16 @@ namespace MediaTekDocuments.view
         /// </summary>
         private readonly BindingSource bdgCommandesListeDvd = new BindingSource();
         /// <summary>
-        /// Liste des commandes de dvd récupérées pour le dvd sélectionné, utilisée pour l'affichage et le tri dans le datagridview
+        /// Liste des commandes de dvd récupérées pour le dvd sélectionné
         /// </summary>
         private List<CommandeDocument> lesCommandesDvd = new List<CommandeDocument>();
         /// <summary>
-        /// Document sélectionné dans l'onglet des commandes de dvd, utilisé pour afficher les informations du dvd et de ses commandes
+        /// Document sélectionné dans l'onglet des commandes DVD
         /// </summary>
         private Document documentSelectionneDvd;
 
         /// <summary>
-        /// Ouverture de l'onglet : récupère les dvd
+        /// Initialisation de l'onglet Commandes DVD
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2632,9 +2646,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations du document sélectionné
+        /// Affiche les informations du document sélectionné
         /// </summary>
-        /// <param name="documentSelectionneDvd"></param>
+        /// <param name="documentSelectionneDvd">Document à afficher</param>
         private void RemplirInfosDocumentDvd(Document documentSelectionneDvd)
         {
             if (documentSelectionneDvd == null) return;
@@ -2643,9 +2657,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations du dvd sélectionné
+        /// Affiche les informations du DVD sélectionné
         /// </summary>
-        /// <param name="dvd"></param>
+        /// <param name="dvd">DVD à afficher</param>
         private void RemplirInfosDvd(Dvd dvd)
         {
             if (dvd == null) return;
@@ -2659,7 +2673,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Vide les zones d'affichage des informations du document et du dvd
+        /// Vide les champs d'affichage du document et du DVD
         /// </summary>
         private void ViderChampsDvd()
         {
@@ -2674,9 +2688,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste de commandes reçue en paramètre
+        /// Remplit le DataGridView avec la liste de commandes DVD
         /// </summary>
-        /// <param name="commandes"></param>
+        /// <param name="commandes">Liste des commandes</param>
         private void RemplirCommandesListeDvd(List<CommandeDocument> commandes)
         {
             if (commandes != null)
@@ -2709,7 +2723,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur les colonnes du datagrid des commandes
+        /// Tri des commandes selon la colonne cliquée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2745,7 +2759,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage du dvd dont on a saisi le numéro.
+        /// Recherche et affichage du DVD correspondant au numéro saisi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2755,7 +2769,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Enregistrement d'une nouvelle commande pour le dvd sélectionné.
+        /// Enregistrement d'une nouvelle commande pour le DVD sélectionné
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2805,7 +2819,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage du suivi de la commande sélectionnée et possibilité de le modifier.
+        /// Affiche le suivi de la commande et permet sa modification
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2831,7 +2845,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Annulation du changement de suivi : réinitialisation de la combobox et désactivation du groupe de modification
+        /// Annule la modification du suivi et réinitialise les champs
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2843,7 +2857,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Validation du changement de suivi : vérification de la cohérence des étapes (ex : une commande réglée ne peut pas être remise en cours, etc.)
+        /// Enregistre la modification du suivi de la commande sélectionnée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2883,7 +2897,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Validation du changement de suivi : vérification de la cohérence des étapes (ex : une commande réglée ne peut pas être remise en cours, etc.)
+        /// Vérifie la cohérence lors du changement d'étape d'une commande DVD
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2934,7 +2948,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Suppression de la commande sélectionnée après confirmation de l'utilisateur et rafraîchissement de la liste des commandes
+        /// Supprime la commande DVD sélectionnée après confirmation et met à jour la liste
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -2980,20 +2994,20 @@ namespace MediaTekDocuments.view
 
         #region Onglet Commandes de revues
         /// <summary>
-        /// Binding source pour la datagrid des abonnements d'une revue : permet de lier la liste d'abonnements à la datagrid et de rafraîchir facilement l'affichage après modification de la liste
+        /// BindingSource pour la DataGridView des abonnements d'une revue
         /// </summary>
         private readonly BindingSource bdgCommandesListeRevue = new BindingSource();
         /// <summary>
-        /// Liste des abonnements de la revue sélectionnée : elle est mise à jour à chaque sélection d'une revue et après chaque modification (ajout, suppression) d'abonnement pour la revue sélectionnée. C'est cette liste qui est liée à la datagrid via le binding source.
+        /// Liste des abonnements pour la revue sélectionnée
         /// </summary>
         private List<Abonnement> lesAbonnements = new List<Abonnement>();
         /// <summary>
-        /// Document de la revue sélectionnée : il est mis à jour à chaque sélection d'une revue et permet d'afficher les informations du document (titre, image) et de récupérer son id pour les opérations d'ajout/suppression d'abonnement. C'est la revue sélectionnée dans la liste des revues qui détermine le contenu de la datagrid des abonnements. Si aucune revue n'est sélectionnée, la datagrid est vide.
+        /// Document de la revue sélectionnée
         /// </summary>
         private Document documentSelectionneRevue;
 
         /// <summary>
-        /// Ouverture de l'onglet : récupère les revues
+        /// Initialisation de l'onglet Commandes Revue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3003,9 +3017,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations du document sélectionné
+        /// Affiche les informations du document sélectionné
         /// </summary>
-        /// <param name="documentSelectionneRevue"></param>
+        /// <param name="documentSelectionneRevue">Document à afficher</param>
         private void RemplirInfosDocumentRevue(Document documentSelectionneRevue)
         {
             if (documentSelectionneRevue == null)
@@ -3015,9 +3029,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Affichage des informations de la revue sélectionnée
+        /// Affiche les informations de la revue sélectionnée
         /// </summary>
-        /// <param name="revue"></param>
+        /// <param name="revue">Revue à afficher</param>
         private void RemplirInfosRevue(Revue revue)
         {
             if (revue == null)
@@ -3030,7 +3044,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Vide les zones d'affichage des informations du document et de la revue
+        /// Vide les champs d'affichage du document et de la revue
         /// </summary>
         private void ViderChampsRevue()
         {
@@ -3044,9 +3058,9 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Remplit le dategrid avec la liste d'abonnements reçue en paramètre
+        /// Remplit le DataGridView avec la liste des abonnements reçue en paramètre
         /// </summary>
-        /// <param name="abonnements"></param>
+        /// <param name="abonnements">Liste des abonnements</param>
         private void RemplirCommandesListeRevue(List<Abonnement> abonnements)
         {
             if (abonnements != null)
@@ -3081,7 +3095,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Tri sur les colonnes du datagrid des abonnements
+        /// Tri des abonnements selon la colonne cliquée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3114,7 +3128,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Recherche et affichage de la revue dont on a saisi le numéro.
+        /// Recherche et affichage de la revue correspondant au numéro saisi
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3148,7 +3162,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Enregistrement d'une nouvelle commande d'abonnement pour la revue sélectionnée.
+        /// Enregistre une nouvelle commande d'abonnement pour la revue sélectionnée
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3203,7 +3217,7 @@ namespace MediaTekDocuments.view
         }
 
         /// <summary>
-        /// Suppression de la commande d'abonnement sélectionnée après vérification de la règle métier (pas d'exemplaire livré durant la période d'abonnement)
+        /// Supprime la commande d'abonnement sélectionnée après vérification des règles métiers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
