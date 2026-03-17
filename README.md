@@ -1,77 +1,168 @@
 # MediatekDocuments
-Cette application permet de gérer les documents (livres, DVD, revues) d'une médiathèque. Elle a été codée en C# sous Visual Studio 2019. C'est une application de bureau, prévue d'être installée sur plusieurs postes accédant à la même base de données.<br>
+Cette application permet de gérer les documents (livres, DVD, revues) d'une médiathèque. Elle a été codée en C# sous Visual Studio 2022. C'est une application de bureau, prévue d'être installée sur plusieurs postes accédant à la même base de données. Cette version inclut plusieurs nouvelles fonctionnalités pour faciliter la gestion des documents et des abonnements.<br>
 L'application exploite une API REST pour accéder à la BDD MySQL. Des explications sont données plus loin, ainsi que le lien de récupération.
-## Présentation
-Actuellement l'application est partiellement codée. Voici les fonctionnalités actuellement opérationnelles : recherches et affichage d'informations sur les documents de la médiathèque (livres, DVD, revues), réception de nouveaux numéros de revues.<br>
-![img1](https://github.com/CNED-SLAM/MediaTekDocuments/assets/100127886/9b5a4c1b-6914-4455-94bf-fec24adba3ec)
-<br>L'application ne comporte qu'une seule fenêtre divisée en plusieurs onglets.
-## Les différents onglets
+Voici le lien vers le dépôt d'origine dans lequel se trouve le README avec la présentation de l'application d'origine : https://github.com/CNED-SLAM/MediaTekDocuments <br> <br>
+
+## Les nouvelles fonctionnalités ajoutées à l'application
+### Fenêtre d'authentification
+<img width="403" height="275" alt="Capture d&#39;écran 2026-03-17 153627" src="https://github.com/user-attachments/assets/f222b0b2-c72a-48f0-a82c-8c5df5cb6156" /> <br> <br>
+Une nouvelle fenêtre permet aux utilisateurs de s'identifier en saisissant leur login et leur mot de passe. Si les informations sont incorrectes, un message d'erreur apparaît. Il est aussi possible d'effacer les champs en cliquant sur "Annuler". Toutefois, si les données entrées sont correctes, l'utilisateur peut se connecter et accéder à l'application selon les droits d'accès qui lui sont attribués. Le service culture n'a aucun accès à l'application, le service prêt peut consulter et rechercher des documents, tandis que les administrateurs et le service administratif disposent d'un accès complet à l'application. <br> <br>
+
+### Fenêtre d'alerte sur les abonnements se terminant
+<img width="526" height="307" alt="Capture d&#39;écran 2026-03-17 153833" src="https://github.com/user-attachments/assets/ac2c4827-96d4-454c-935c-03418352acde" /> <br> <br>
+Cette fenêtre n'apparaît que pour les administrateurs et le service administratif afin de signaler les abonnements de revue se terminant dans moins de trente jours. Elle affiche le nom de la revue concernée et la date de la fin de l'abonnement, permettant ainsi de suivre facilement les renouvellements à prévoir. <br> <br>
+
 ### Onglet 1 : Livres
-Cet onglet présente la liste des livres, triée par défaut sur le titre.<br>
-La liste comporte les informations suivantes : titre, auteur, collection, genre, public, rayon.
-![img2](https://github.com/CNED-SLAM/MediaTekDocuments/assets/100127886/e3f31979-cf24-416d-afb1-a588356e8966)
-#### Recherches
-<strong>Par le titre :</strong> Il est possible de rechercher un ou plusieurs livres par le titre. La saisie dans la zone de recherche se fait en autocomplétions sans tenir compte de la casse. Seuls les livres concernés apparaissent dans la liste.<br>
-<strong>Par le numéro :</strong> il est possible de saisir un numéro et, en cliquant sur "Rechercher", seul le livre concerné apparait dans la liste (ou un message d'erreur si le livre n'est pas trouvé, avec la liste remplie à nouveau).
-#### Filtres
-Il est possible d'appliquer un filtre (un seul à la fois) sur une de ces 3 catégories : genre, public, rayon.<br>
-Un combo par catégorie permet de sélectionner un item. Seuls les livres correspondant à l'item sélectionné, apparaissent dans la liste (par exemple, en choisissant le genre "Policier", seuls les livres de genre "Policier" apparaissent).<br>
-Le fait de sélectionner un autre filtre ou de faire une recherche, annule le filtre actuel.<br>
-Il est possible aussi d'annuler le filtre en cliquant sur une des croix.
-#### Tris
-Le fait de cliquer sur le titre d'une des colonnes de la liste des livres, permet de trier la liste par rapport à la colonne choisie.
-#### Affichage des informations détaillées
-Si la liste des livres contient des éléments, par défaut il y en a toujours un de sélectionné. Il est aussi possible de sélectionner une ligne (donc un livre) en cliquant n'importe où sur la ligne.<br>
-La partie basse de la fenêtre affiche les informations détaillées du livre sélectionné (numéro de document, code ISBN, titre, auteur(e), collection, genre, public, rayon, chemin de l'image) ainsi que l'image.
+Cet onglet présente toujours la liste des livres mais avec différentes fonctionnalités supplémentaires afin d'offrir une gestion complète et sécurisée des livres. <br><br>
+<img width="764" height="712" alt="Capture d&#39;écran 2026-03-17 153847" src="https://github.com/user-attachments/assets/81dd1820-cd9d-4505-80ea-ef80b617d6e3" /> <br>
+
+#### Ajout d'un livre
+En cliquant sur "Ajouter un livre", la fenêtre ci-dessous s'ouvre, permettant de saisir les informations du livre à ajouter. Les champs obligatoires incluent le numéro de document, le titre, l’auteur, le genre, le public et le rayon. Si des données obligatoires sont absentes, un message le signale. <br>
+En cliquant sur le bouton "Valider", un message de confirmation s'affiche afin que l'utilisateur confirme ou annule l'ajout. S'il confirme, un message de validation apparaît pour signaler le succès de l'opération et le livre est ajouté dans la base de données. Il est aussi possible d'annuler l'ajout en cliquant sur le bouton "Annuler", et revenir ainsi à la fenêtre principale de l'application. <br><br>
+<img width="524" height="344" alt="Capture d&#39;écran 2026-03-17 153858" src="https://github.com/user-attachments/assets/5d00bb42-6176-44dd-a0ad-b284f3d0f23e" /> <br>
+
+#### Modification d'un livre
+En sélectionnant un livre (obligatoire) et en cliquant sur "Modifier un livre", la fenêtre ci-dessous s'ouvre. Elle affiche les informations actuelles du livre sélectionné, pré-remplies dans les champs correspondants. Il est alors possible de modifier ces informations mais les champs obligatoires ne peuvent pas être laissés vides.<br>
+Pour que les modifications soient prises en compte, l'utilisateur doit cliquer sur "Modifier", un message de confirmation s'affiche, permettant de valider ou annuler l'opération. Si l'utilisateur approuve, un message s'apparaît, confirmant la prise en compte des modifications et la base de données est mise à jour. Il est également possible d'annuler la modification en cours en cliquant sur "Annuler", revenant ainsi à la fenêtre principale de l'application.<br><br>
+<img width="522" height="341" alt="Capture d&#39;écran 2026-03-17 153907" src="https://github.com/user-attachments/assets/9a2e4eb2-0842-492a-8a71-eff04881fff5" /> <br>
+
+#### Suppression d'un livre
+Un livre peut être supprimé de la base de données après sélection, en cliquant sur le bouton "Supprimer un livre". Cependant, si le livre est lié à des commandes en cours ou à des exemplaires, il ne sera pas possible de le supprimer et un message s'affichera pour en informer l'utilisateur, garantissant ainsi l'intégrité des données. Si la suppression est possible, une fenêtre de confirmation s'ouvre alors afin que l'utilisateur valide ou annule la suppression. <br>
+
+#### Consultation des exemplaires d'un livre
+Sélectionner un livre permet de visualiser ses exemplaires disponibles, avec leur numéro, la date d’achat et l’état actuel (voir capture d'écran ci-dessous). La liste est triable par chaque colonne pour faciliter la recherche.<br><br>
+<img width="461" height="123" alt="Capture d&#39;écran 2026-03-17 153928" src="https://github.com/user-attachments/assets/fc5b7b98-1679-4bdb-b6b7-46c83df5bbcb" /> <br>
+
+#### Modification de l'état d'un exemplaire d'un livre
+En sélectionnant un exemplaire, il est possible de changer son état en cliquant sur "Modifier l'état", ce qui permet d'accéder au groupbox dédié. Les champs du numéro et de l’état actuel sont automatiquement remplis selon l’exemplaire sélectionné. Pour l'état, il suffit de changer celui-ci dans la combobox. Après modification, l’utilisateur peut valider ou annuler le changement avant que la base de données ne soit mise à jour.<br>
+
+#### Suppression d'un exemplaire
+La suppression d’un exemplaire se fait en sélectionnant celui-ci dans la liste, puis en cliquant sur le bouton "Supprimer". Une fenêtre de confirmation s’affiche alors afin de permettre à l’utilisateur de valider ou d’annuler l’opération, ce qui limite les risques de suppression accidentelle. Une fois la suppression confirmée, l’exemplaire est définitivement retiré de la base de données et n’apparaît plus dans la liste.<br> <br>
+
 ### Onglet 2 : DVD
-Cet onglet présente la liste des DVD, triée par titre.<br>
-La liste comporte les informations suivantes : titre, durée, réalisateur, genre, public, rayon.<br>
-Le fonctionnement est identique à l'onglet des livres.<br>
-La seule différence réside dans certaines informations détaillées, spécifiques aux DVD : durée (à la place de ISBN), réalisateur (à la place de l'auteur), synopsis (à la place de collection).
+Cet onglet présente toujours la liste des DVD mais avec différentes fonctionnalités supplémentaires afin d'offrir une gestion complète et sécurisée des DVD.<br><br>
+<img width="771" height="711" alt="Capture d&#39;écran 2026-03-17 153944" src="https://github.com/user-attachments/assets/7531152b-f03f-4682-9d87-9343826f88d7" /> <br>
+
+#### Ajout d'un DVD
+En cliquant sur "Ajouter un DVD", la fenêtre ci-dessous s'ouvre, permettant de saisir les informations du dvd à ajouter. Les champs obligatoires incluent le numéro de document, le titre, le réalisateur, le synopsis, la durée, le genre, le public et le rayon. Si des données obligatoires sont absentes, un message le signale. <br>
+En cliquant sur le bouton "Valider", un message de confirmation s'affiche afin que l'utilisateur confirme ou annule l'ajout. S'il confirme, un message de validation apparaît pour signaler le succès de l'opération et le DVD est ajouté dans la base de données. Il est aussi possible d'annuler l'ajout en cliquant sur le bouton "Annuler", et revenir ainsi à la fenêtre principale de l'application. <br><br>
+<img width="518" height="396" alt="Capture d&#39;écran 2026-03-17 153954" src="https://github.com/user-attachments/assets/3a833e11-ae82-47b3-a77b-1069c7c12af7" /> <br>
+
+#### Modification d'un DVD
+En sélectionnant un DVD (obligatoire) et en cliquant sur "Modifier un DVD", la fenêtre ci-dessous s'ouvre. Elle affiche les informations actuelles du DVD sélectionné, pré-remplies dans les champs correspondants. Il est alors possible de modifier ces informations mais les champs obligatoires ne peuvent pas être laissés vides.<br>
+Pour que les modifications soient prises en compte, l'utilisateur doit cliquer sur "Modifier", un message de confirmation s'affiche, permettant de valider ou annuler l'opération. Si l'utilisateur approuve, un message apparaît, confirmant la prise en compte des modifications et la base de données est mise à jour. Il est également possible d'annuler la modification en cours en cliquant sur "Annuler", revenant ainsi à la fenêtre principale de l'application.<br><br>
+<img width="522" height="398" alt="Capture d&#39;écran 2026-03-17 154006" src="https://github.com/user-attachments/assets/201e2ad2-5204-46ed-81a6-204346510345" /> <br>
+
+#### Suppression d'un DVD
+Un DVD peut être supprimé de la base de données après sélection, en cliquant sur le bouton "Supprimer un DVD". Cependant, si le DVD est lié à des commandes en cours ou à des exemplaires, il ne sera pas possible de le supprimer et un message s'affichera pour en informer l'utilisateur, garantissant ainsi l'intégrité des données. Si la suppression est possible, une fenêtre de confirmation s'ouvre alors afin que l'utilisateur valide ou annule la suppression. <br>
+
+#### Consultation des exemplaires d'un DVD
+Sélectionner un DVD permet de visualiser ses exemplaires disponibles, avec leur numéro, la date d’achat et l’état actuel (voir capture d'écran ci-dessous). La liste est triable par chaque colonne pour faciliter la recherche.<br><br>
+<img width="767" height="713" alt="Capture d&#39;écran 2026-03-17 154037" src="https://github.com/user-attachments/assets/fee736b7-408b-414d-a47e-2828fa62bed9" /> <br>
+
+#### Modification de l'état d'un exemplaire d'un DVD
+En sélectionnant un exemplaire, il est possible de changer son état en cliquant sur "Modifier l'état", ce qui permet d'accéder au groupbox dédié. Les champs du numéro et de l’état actuel sont automatiquement remplis selon l’exemplaire sélectionné. Pour l'état, il suffit de changer celui-ci dans la combobox. Après modification, l’utilisateur peut valider ou annuler le changement avant que la base de données ne soit mise à jour.<br>
+
+#### Suppression d'un exemplaire
+La suppression d’un exemplaire se fait en sélectionnant celui-ci dans la liste, puis en cliquant sur le bouton "Supprimer". Une fenêtre de confirmation s’affiche alors afin de permettre à l’utilisateur de valider ou d’annuler l’opération, ce qui limite les risques de suppression accidentelle. Une fois la suppression confirmée, l’exemplaire est définitivement retiré de la base de données et n’apparaît plus dans la liste.<br> <br>
+
 ### Onglet 3 : Revues
-Cet onglet présente la liste des revues, triées par titre.<br>
-La liste comporte les informations suivantes : titre, périodicité, délai mise à dispo, genre, public, rayon.<br>
-Le fonctionnement est identique à l'onglet des livres.<br>
-La seule différence réside dans certaines informations détaillées, spécifiques aux revues : périodicité (à la place de l'auteur), délai mise à dispo (à la place de collection).
+Cet onglet présente toujours la liste des revues mais avec différentes fonctionnalités supplémentaires afin d'offrir une gestion complète et sécurisée des revues.<br><br>
+<img width="767" height="713" alt="Capture d&#39;écran 2026-03-17 154037" src="https://github.com/user-attachments/assets/8c0ecc69-4056-4f46-81e9-621e181ca6ff" /> <br>
+#### Ajout d'une revue
+En cliquant sur "Ajouter une revue", la fenêtre ci-dessous s'ouvre, permettant de saisir les informations de la revue à ajouter. Les champs obligatoires incluent le numéro de document, le titre, la périodicité, le délai de mise à disposition, le genre, le public et le rayon. Si des données obligatoires sont absentes, un message le signale. <br>
+En cliquant sur le bouton "Valider", un message de confirmation s'affiche afin que l'utilisateur confirme ou annule l'ajout. S'il confirme, un message de validation apparaît pour signaler le succès de l'opération et la revue est ajouté dans la base de données. Il est aussi possible d'annuler l'ajout en cliquant sur le bouton "Annuler", et revenir ainsi à la fenêtre principale de l'application. <br><br>
+<img width="520" height="344" alt="Capture d&#39;écran 2026-03-17 154103" src="https://github.com/user-attachments/assets/e8157f90-6b75-4ab5-a330-9b1b15d9ece7" /> <br>
+
+#### Modification d'une revue
+En sélectionnant une revue (obligatoire) et en cliquant sur "Modifier un revue", la fenêtre ci-dessous s'ouvre. Elle affiche les informations actuelles de la revue sélectionnée, pré-remplies dans les champs correspondants. Il est alors possible de modifier ces informations mais les champs obligatoires ne peuvent pas être laissés vides.<br>
+Pour que les modifications soient prises en compte, l'utilisateur doit cliquer sur "Modifier", un message de confirmation s'affiche, permettant de valider ou annuler l'opération. Si l'utilisateur approuve, un message apparaît, confirmant la prise en compte des modifications et la base de données est mise à jour. Il est également possible d'annuler la modification en cours en cliquant sur "Annuler", revenant ainsi à la fenêtre principale de l'application.<br><br>
+<img width="520" height="339" alt="Capture d&#39;écran 2026-03-17 154111" src="https://github.com/user-attachments/assets/2a8ec328-e393-46ad-a0e2-18655ff38fd1" /> <br>
+
+#### Suppression d'une revue
+Une revue peut être supprimée de la base de données après sélection, en cliquant sur le bouton "Supprimer une revue". Cependant, si la revue est liée à des abonnements en cours ou à des exemplaires, il ne sera pas possible de la supprimer et un message s'affichera pour en informer l'utilisateur, garantissant ainsi l'intégrité des données. Si la suppression est possible, une fenêtre de confirmation s'ouvre alors afin que l'utilisateur valide ou annule la suppression. <br><br>
+
 ### Onglet 4 : Parutions des revues
-Cet onglet permet d'enregistrer la réception de nouvelles parutions d'une revue.<br>
-Il se décompose en 2 parties (groupbox).
-#### Partie "Recherche revue"
-Cette partie permet, à partir de la saisie d'un numéro de revue (puis en cliquant sur le bouton "Rechercher"), d'afficher toutes les informations de la revue (comme dans l'onglet précédent), ainsi que son image principale en petit, avec en plus la liste des parutions déjà reçues (numéro, date achat, chemin photo). Sur la sélection d'une ligne dans la liste des parutions, la photo de la parution correspondante s'affiche à droite.<br>
-Dès qu'un numéro de revue est reconnu et ses informations affichées, la seconde partie ("Nouvelle parution réceptionnée pour cette revue") devient accessible.<br>
-Si une modification est apportée au numéro de la revue, toutes les zones sont réinitialisées et la seconde partie est rendue inaccessible, tant que le bouton "Rechercher" n'est pas utilisé.
-#### Partie "Nouvelle parution réceptionnée pour cette revue"
-Cette partie n'est accessible que si une revue a bien été trouvée dans la première partie.<br>
-Il est possible alors de réceptionner une nouvelle parution en saisissant son numéro, en sélectionnant une date (date du jour proposée par défaut) et en cherchant l'image correspondante (optionnel) qui doit alors s'afficher à droite.<br>
-Le clic sur "Valider la réception" va permettre d'ajouter un tuple dans la table Exemplaire de la BDD. La parution correspondante apparaitra alors automatiquement dans la liste des parutions et les zones de la partie "Nouvelle parution réceptionnée pour cette revue" seront réinitialisées.<br>
-Si le numéro de la parution existe déjà, il n’est pas ajouté et un message est affiché.
-![img3](https://github.com/CNED-SLAM/MediaTekDocuments/assets/100127886/225e10f2-406a-4b5e-bfa9-368d45456056)
+Cet onglet permet d'enregistrer la réception de nouvelles parutions d'une revue, de visualiser les exemplaires et modifier l'état de ces derniers.
+Il se décompose désormais en 3 parties (groupbox).<br><br>
+<img width="767" height="712" alt="Capture d&#39;écran 2026-03-17 154140" src="https://github.com/user-attachments/assets/4e262593-3404-4c1f-932a-8acf8a3bab53" /> <br>
+
+#### Consultation les exemplaires d'une revue
+Sélectionner une revue permet de visualiser ses exemplaires disponibles, avec leur numéro, la date d’achat et l’état actuel (voir capture d'écran ci-dessus). La liste est triable par chaque colonne pour faciliter la recherche.<br>
+
+#### Modification de l'état d'un exemplaire d'une revue
+En sélectionnant un exemplaire, il est possible de changer son état en cliquant sur "Modifier l'état", ce qui permet d'accéder au groupbox dédié. Les champs du numéro et de l’état actuel sont automatiquement remplis selon l’exemplaire sélectionné. Pour l'état, il suffit de changer celui-ci dans la combobox. Après modification, l’utilisateur peut valider ou annuler le changement avant que la base de données ne soit mise à jour.<br>
+
+#### Suppression d'un exemplaire
+La suppression d’un exemplaire se fait en sélectionnant celui-ci dans la liste, puis en cliquant sur le bouton "Supprimer". Une fenêtre de confirmation s’affiche alors afin de permettre à l’utilisateur de valider ou d’annuler l’opération, ce qui limite les risques de suppression accidentelle. Une fois la suppression confirmée, l’exemplaire est définitivement retiré de la base de données et n’apparaît plus dans la liste.<br> <br>
+
+### Onglet 5 : Commandes de livres
+Cet onglet permet de rechercher un livre afin d'ajouter et gérer les commandes qui lui sont associées.<br><br>
+<img width="770" height="609" alt="Capture d&#39;écran 2026-03-17 154214" src="https://github.com/user-attachments/assets/8dd75ff9-f16d-4890-a2d3-eaa1f941570d" /> <br>
+#### Rechercher un livre
+La première partie permet de saisir un numéro de document afin de rechercher un livre. Si le numéro existe, l'ensemble des informations du livre s'affiche dans les champs correspondants ainsi que la liste des commandes déjà enregistrées. Pour chaque commande, sont affichés son numéro, la date de la commande, le montant, le nombre d'exemplaires ainsi que son état de suivi.<br>
+#### Nouvelle commande du livre
+Cette section, située en bas de la fenêtre, permet d'ajouter une nouvelle commande pour le livre sélectionné. Tous les champs sont obligatoires : numéro de la commande, date de la commande, nombre d'exmplaires et le montant. Une fois les informations saisies, il suffit ensuite de cliquer sur "Enregistrer la commande" pour que celle-ci soit ajoutée en base de données et apparaisse dans la liste des commandes. Les champs de saisie sont ensuite réinitialisés. Si jamais le numéro de commande existe déjà, l'enregistrement est refusé et un message apparaît pour en informer l'utilisateur.<br>
+#### Modifier le suivi de la commande
+Pour accéder à cette partie, il est nécessaire de sélectionner une commande du livre puis de cliquer sur "Modifier le suivi de la commande". Les champs sont alors pré-remplis avec les informations de la commande sélectionnée. L’utilisateur peut faire évoluer l’état de la commande. Si cette dernière est "en cours", elle peut être "livrée" ou "relancée". Pour passer à l'étape "réglée", la commande doit obligatoirement avoir été livrée auparavant. Aucun retour en arrière vers une étape précédente n'est possibe. <br>
+Lorsqu'une commande passe à l'étape de suivi "livrée", les exemplaires correspondants sont automatiquement créés dans la base de données. Ils deviennent alors visibles dans les onglets précédents, dans la partie dédiée aux exemplaires. <br>
+Il est aussi possible d’annuler une modification en cliquant sur "Annuler", ce qui permet de revenir à l’état initial sans enregistrer de changement.<br>
+#### Suppression d'une commande
+Une commande peut être supprimée après sélection en cliquant sur "Supprimer la commande". Cependant, seules les commandes en cours ou relancées peuvent être supprimées. Si l’utilisateur tente de supprimer une commande livrée ou réglée, un message s’affiche pour l’en informer. Lorsque la suppression est autorisée, une demande de confirmation apparaît afin de valider ou d’annuler l’opération, ce qui permet d’éviter toute suppression involontaire.<br> <br>
+
+### Onglet 6 : Commandes de DVD
+Cet onglet permet de rechercher un DVD afin d'ajouter et gérer les commandes qui lui sont associées.<br><br>
+<img width="781" height="629" alt="Capture d&#39;écran 2026-03-17 154223" src="https://github.com/user-attachments/assets/0e111814-0cde-4d95-aaed-4c2b92673d14" /> <br>
+#### Rechercher un DVD
+La première partie permet de saisir un numéro de document afin de rechercher un DVD. Si le numéro existe, l'ensemble des informations du DVD s'affiche dans les champs correspondants ainsi que la liste des commandes déjà enregistrées. Pour chaque commande, sont affichés son numéro, la date de la commande, le montant, le nombre d'exemplaires ainsi que son état de suivi.<br>
+#### Nouvelle commande du DVD
+Cette section, située en bas de la fenêtre, permet d'ajouter une nouvelle commande pour le DVD sélectionné. Tous les champs sont obligatoires : numéro de la commande, date de la commande, nombre d'exmplaires et le montant. Une fois les informations saisies, il suffit ensuite de cliquer sur "Enregistrer la commande" pour que celle-ci soit ajoutée en base de données et apparaisse dans la liste des commandes. Les champs de saisie sont ensuite réinitialisés. Si jamais le numéro de commande existe déjà, l'enregistrement est refusé et un message apparaît pour en informer l'utilisateur.<br>
+#### Modifier le suivi de la commande
+Pour accéder à cette partie, il est nécessaire de sélectionner une commande du DVD puis de cliquer sur "Modifier le suivi de la commande". Les champs sont alors pré-remplis avec les informations de la commande sélectionnée. L’utilisateur peut faire évoluer l’état de la commande. Si cette dernière est "en cours", elle peut être "livrée" ou "relancée". Pour passer à l'étape "réglée", la commande doit obligatoirement avoir été livrée auparavant. Aucun retour en arrière vers une étape précédente n'est possibe. <br>
+Lorsqu'une commande passe à l'étape de suivi "livrée", les exemplaires correspondants sont automatiquement créés dans la base de données. Ils deviennent alors visibles dans les onglets précédents, dans la partie dédiée aux exemplaires. <br>
+#### Suppression d'une commande
+Une commande peut être supprimée après sélection en cliquant sur "Supprimer la commande". Cependant, seules les commandes en cours ou relancées peuvent être supprimées. Si l’utilisateur tente de supprimer une commande livrée ou réglée, un message s’affiche pour l’en informer. Lorsque la suppression est autorisée, une demande de confirmation apparaît afin de valider ou d’annuler l’opération, ce qui permet d’éviter toute suppression involontaire.<br> <br>
+
+### Onglet 7 : Commandes de revues
+Cet onglet permet de rechercher une revue afin d'ajouter et gérer les commandes (abonnements) qui lui sont associées.<br><br>
+<img width="786" height="606" alt="Capture d&#39;écran 2026-03-17 155604" src="https://github.com/user-attachments/assets/3ad53c66-36be-4cf3-ad28-9806fd40ce2b" /> <br>
+#### Rechercher une revue
+La première partie permet de saisir un numéro de document afin de rechercher une revue. Si le numéro existe, l'ensemble des informations de la revue s'affiche dans les champs correspondants ainsi que la liste des commandes déjà enregistrées. Pour chaque commande, sont affichés son numéro, la date de la commande, le montant et la date de la fin de l'abonnement.<br>
+#### Nouvelle commande d'une revue
+Cette section, située en bas de la fenêtre, permet d'ajouter une nouvelle commande (abonnement) pour la revue sélectionnée. Tous les champs sont obligatoires : numéro de la commande, date de la commande, montant et date de fin de l'abonnement. Une fois les informations saisies, il suffit ensuite de cliquer sur "Enregistrer la commande" pour que celle-ci soit ajoutée en base de données et apparaisse dans la liste des commandes. Les champs de saisie sont ensuite réinitialisés. Si jamais le numéro de commande existe déjà, l'enregistrement est refusé et un message apparaît pour en informer l'utilisateur.<br>
+#### Suppression d'une commande
+Une commande peut être supprimée après sélection en cliquant sur "Supprimer la commande". Cependant, les commandes n'ayant pas un exemplaire de revue reçu entre la date de début et la date de fin de l'abonnement ne peuvent pas être supprimées et un message en informe l'utilisateur. Lorsque la suppression est autorisée, une demande de confirmation apparaît afin de valider ou d’annuler l’opération, ce qui permet d’éviter toute suppression involontaire.<br> <br>
+
 ## La base de données
 La base de données 'mediatek86 ' est au format MySQL.<br>
-Voici sa structure :<br>
-![img4](https://github.com/CNED-SLAM/MediaTekDocuments/assets/100127886/4314f083-ec8b-4d27-9746-fecd1387d77b)
-<br>On distingue les documents "génériques" (ce sont les entités Document, Revue, Livres-DVD, Livre et DVD) des documents "physiques" qui sont les exemplaires de livres ou de DVD, ou bien les numéros d’une revue ou d’un journal.<br>
-Chaque exemplaire est numéroté à l’intérieur du document correspondant, et a donc un identifiant relatif. Cet identifiant est réel : ce n'est pas un numéro automatique. <br>
-Un exemplaire est caractérisé par :<br>
-. un état d’usure, les différents états étant mémorisés dans la table Etat ;<br>
-. sa date d’achat ou de parution dans le cas d’une revue ;<br>
-. un lien vers le fichier contenant sa photo de couverture de l'exemplaire, renseigné uniquement pour les exemplaires des revues, donc les parutions (chemin complet) ;
-<br>
-Un document a un titre (titre de livre, titre de DVD ou titre de la revue), concerne une catégorie de public, possède un genre et est entreposé dans un rayon défini. Les genres, les catégories de public et les rayons sont gérés dans la base de données. Un document possède aussi une image dont le chemin complet est mémorisé. Même les revues peuvent avoir une image générique, en plus des photos liées à chaque exemplaire (parution).<br>
-Une revue est un document, d’où le lien de spécialisation entre les 2 entités. Une revue est donc identifiée par son numéro de document. Elle a une périodicité (quotidien, hebdomadaire, etc.) et un délai de mise à disposition (temps pendant lequel chaque exemplaire est laissé en consultation). Chaque parution (exemplaire) d'une revue n'est disponible qu'en un seul "exemplaire".<br>
-Un livre a aussi pour identifiant son numéro de document, possède un code ISBN, un auteur et peut faire partie d’une collection. Les auteurs et les collections ne sont pas gérés dans des tables séparées (ce sont de simples champs textes dans la table Livre).<br>
-De même, un DVD est aussi identifié par son numéro de document, et possède un synopsis, un réalisateur et une durée. Les réalisateurs ne sont pas gérés dans une table séparée (c’est un simple champ texte dans la table DVD).
-Enfin, 3 tables permettent de mémoriser les données concernant les commandes de livres ou DVD et les abonnements. Une commande est effectuée à une date pour un certain montant. Un abonnement est une commande qui a pour propriété complémentaire la date de fin de l’abonnement : il concerne une revue.  Une commande de livre ou DVD a comme caractéristique le nombre d’exemplaires commandé et concerne donc un livre ou un DVD.<br>
-<br>
-La base de données est remplie de quelques exemples pour pouvoir tester son application. Dans les champs image (de Document) et photo (de Exemplaire) doit normalement se trouver le chemin complet vers l'image correspondante. Pour les tests, vous devrez créer un dossier, le remplir de quelques images et mettre directement les chemins dans certains tuples de la base de données qui, pour le moment, ne contient aucune image.<br>
-Lorsque l'application sera opérationnelle, c'est le personnel de la médiathèque qui sera en charge de saisir les informations des documents.
+Voici sa structure :<br><br>
+![mcd_mediatekdocuments_fin](https://github.com/user-attachments/assets/0610496f-0e7c-4536-b951-7ace1c9f46e1) <br>
+
+### L'évolution de la base de données
+La base de données a été enrichie afin de prendre en compte les nouvelles fonctionnalités liées à l’authentification et à la gestion des commandes. Trois nouvelles tables ont ainsi été ajoutées : <br>
+- Suivi : table contenant les différentes étapes possibles de suivi d'une commande de livre ou de DVD (en cours, relancée, livrée, réglée). Chaque commande est associée à une seule étape de suivi, mais une même étape peut concerner plusieurs commandes.
+- Service : table recensant les différents services de la médiathèque auxquels peuvent appartenir le personnel (administrateur, administratif, prêt et culture) et permettant de gérer les droits d'accès à l'application.
+- Utilisateur : table contenant l'ensemble des utilisateurs de l'application qui peuvent s'authentifier sur cette dernière. Chaque utilisateur est rattaché à un seul service, ce qui détermine ses droits et son niveau d’accès.<br> <br>
+
 ## L'API REST
 L'accès à la BDD se fait à travers une API REST protégée par une authentification basique.<br>
 Le code de l'API se trouve ici :<br>
-https://github.com/CNED-SLAM/rest_mediatekdocuments<br>
-avec toutes les explications pour l'utiliser (dans le readme).
+https://github.com/aurelied1991/rest_mediatekdocuments<br>
+avec toutes les explications pour l'utiliser (dans le readme).<br> <br>
+
 ## Installation de l'application
-Ce mode opératoire permet d'installer l'application pour pouvoir travailler dessus.<br>
-- Installer Visual Studio 2019 entreprise et les extension Specflow et newtonsoft.json (pour ce dernier, voir l'article "Accéder à une API REST à partir d'une application C#" dans le wiki de ce dépôt : consulter juste le début pour la configuration, car la suite permet de comprendre le code existant).<br>
-- Télécharger le code et le dézipper puis renommer le dossier en "mediatekdocuments".<br>
-- Récupérer et installer l'API REST nécessaire (https://github.com/CNED-SLAM/rest_mediatekdocuments) ainsi que la base de données (les explications sont données dans le readme correspondant).
+Ce mode opératoire permet d'installer et d'utiliser l'application. <br>
+### Installation avec l’installateur (recommandée)
+Pour une utilisation simple de l’application :
+ - Télécharger le projet puis le décompresser
+ - Ouvrir le dossier du projet
+ - Lancer l’installateur MediaTekDocumentsInstalleur
+ - Suivre les étapes d’installation
+ - Lancer l’application via le raccourci créé sur le bureau ou dans le menu Démarrer
+L’application est configurée pour fonctionner avec l’API en ligne (apirestmediatekdocuments.atwebpages.com). Aucune modification n’est nécessaire.<br>
+
+### Utilisation avec une API locale (optionnel)
+Pour utiliser l’application avec une API REST locale, il est nécessaire de :
+ - S’assurer d’avoir téléchargé le projet
+ - Récupérer et installer l'API REST (https://github.com/aurelied1991/rest_mediatekdocuments) ainsi que la base de données (les explications sont données dans le readme correspondant).<br>
+ - Avec une API locale, il est nécessaire de modifier la valeur de uriApi en indiquant l’URL de l’API locale dans App.config : http://localhost/rest_mediatekdocuments/
